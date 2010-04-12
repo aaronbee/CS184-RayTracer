@@ -1,5 +1,5 @@
 /**
- * Header file for shapes, rays, and such.
+ * Header file for our ray tracer.
  */
 
 #ifndef GEOMETRYH
