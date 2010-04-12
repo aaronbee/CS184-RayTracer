@@ -8,3 +8,5 @@ build
 *.perspectivev3
 *.pyc 
 *~.nib/
+
+Thumbs.db
