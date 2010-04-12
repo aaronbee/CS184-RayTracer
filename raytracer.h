@@ -9,6 +9,7 @@
 
 class ray;
 class shape;
+class scene;
 
 class ray
 {
@@ -26,4 +27,11 @@ public:
   virtual bool intersect(ray r);
 }
 
+class scene
+{
+public:
+  void readScene(string path);
+
+  // variables to hold things in the scene
+}
 #endif
