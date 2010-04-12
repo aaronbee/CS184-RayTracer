@@ -2,10 +2,11 @@
  * Header file for our ray tracer.
  */
 
-#ifndef GEOMETRYH
-#define GEOMETRYH
+#ifndef RAYTRACERH
+#define RAYTRACERH
 
 #include "algebra3.h"
+#include <string>
 
 class ray;
 class shape;
@@ -34,4 +35,5 @@ public:
 
   // variables to hold things in the scene
 }
+
 #endif
