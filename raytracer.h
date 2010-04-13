@@ -7,12 +7,14 @@
 
 #include "algebra3.h"
 #include <string.h>
+#include <vector.h>
 
 class ray;
 class shape;
 class scene;
 class camera;
 class color;
+class film;
 
 class ray
 {
@@ -76,6 +78,18 @@ public:
 
 private:
   vec3 values;
+}
+
+class film
+{
+public:
+  film(int width, int height);
+  void put(vec2 pixel, color c);
+  color get(vec2 pixel);
+  void writeToFile(string path);
+
+private:
+  vector<vector<color> > pixels;
 }
 
 #endif
