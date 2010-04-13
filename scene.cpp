@@ -5,6 +5,22 @@ void scene::readScene(string path)
 {
 }
 
+bool sample::getSample(vec2 *pixel)
+{
+  if (y == height)
+	return false;
+  if (x == width) {
+	x = 0;
+	y ++;
+  }
+
+  *pixel = vec2(x, y);
+  x ++;
+
+  return true;
+}
+
+
 void initialparse (FILE *fp) {
   char line[1000], command[1000] ; // Very bad to prefix array size :-)
 
