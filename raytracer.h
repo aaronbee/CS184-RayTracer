@@ -40,8 +40,14 @@ public:
 class camera
 {
 public:
+  camera(scene &s);
+
   ray generateRay();
 
+private:
+  vec3 u;
+  vec3 v;
+  vec3 w;
 }
 
 #endif
