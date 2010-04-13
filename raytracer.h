@@ -16,9 +16,11 @@ class camera;
 class ray
 {
 public:
-  ray();
-  ray(const vec3 p, const vec3 d);
- 
+  ray(const vec3 p, const vec3 d) : pos(p), dir(d) { }
+  vec3 getPos() { return pos; }
+  vec3 getDir() { return dir; }
+
+private:
   vec3 pos;
   vec3 dir;
 }
@@ -33,21 +35,31 @@ class scene
 {
 public:
   void readScene(string path);
+  int getWidth() { return width; }
+  int getHeight() { return height; }
+  int getFov() { return fov; }
+  vec3 getCameraPos() { return cameraPos; }
 
-  // variables to hold things in the scene
+private:
+  int width, height;
+  int fov;
+  vec3 cameraPos;
 }
 
 class camera
 {
 public:
-  camera(scene &s);
+  camera(scene *s);
 
   ray generateRay();
 
 private:
-  vec3 u;
-  vec3 v;
-  vec3 w;
+  vec3 u, v, w;
+  scene *scn;
+  int x, y;
+  int fovx, fovy;
+
+  bool getSample(vec2 *pixel);
 }
 
 #endif
