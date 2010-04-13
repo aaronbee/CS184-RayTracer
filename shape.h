@@ -34,7 +34,7 @@ public:
 private:
   vec3 center;
   double radius;
-}
+};
 
 
   
@@ -55,9 +55,9 @@ public:
     vec3 p = r.getPos() + distance * r.getDir();
     
     //check if the point is inside the triangle
-    if    (((b - a) ^ (p - a) * normal >= 0.0)
-        && ((c - b) ^ (p - b) * normal >= 0.0)
-        && ((a - c) ^ (p - c) * normal >= 0.0)) {
+    if    ((((b - a) ^ (p - a)) * normal >= 0.0)
+		   && (((c - b) ^ (p - b)) * normal >= 0.0)
+		   && (((a - c) ^ (p - c)) * normal >= 0.0)) {
       return true;
     }
     return false;
@@ -68,4 +68,4 @@ private:
   vec3 a;
   vec3 b;
   vec3 c;
-}
+};

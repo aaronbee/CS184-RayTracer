@@ -82,7 +82,7 @@ vec2(const double x, const double y);
 vec2(const double d);
 vec2(const vec2& v);				// copy constructor
 vec2(const vec3& v);				// cast v3 to v2
-vec2(const vec3& v, int dropAxis);	// cast v3 to v2
+//vec2(const vec3& v, int dropAxis);	// cast v3 to v2
 
 // Assignment operators
 
@@ -446,6 +446,7 @@ inline vec2::vec2(const vec2& v)
 inline vec2::vec2(const vec3& v) // it is up to caller to avoid divide-by-zero
 { n[VX] = v.n[VX]/v.n[VZ]; n[VY] = v.n[VY]/v.n[VZ]; };
 
+/*
 inline vec2::vec2(const vec3& v, int dropAxis) {
     switch (dropAxis) {
 	case VX: n[VX] = v.n[VY]; n[VY] = v.n[VZ]; break;
@@ -453,6 +454,7 @@ inline vec2::vec2(const vec3& v, int dropAxis) {
 	default: n[VX] = v.n[VX]; n[VY] = v.n[VY]; break;
     }
 }
+*/
 
 
 // ASSIGNMENT OPERATORS

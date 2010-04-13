@@ -16,3 +16,8 @@ main.o : main.cpp raytracer.h
 
 raytracer : main.o camera.o film.o scene.o
 	${CC} ${CFLAGS} main.o camera.o film.o scene.o ${LDFLAGS} -o raytracer
+
+all : raytracer
+
+clean :
+	rm -rf *o raytracer

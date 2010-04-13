@@ -1,21 +1,14 @@
 
 #include "raytracer.h"
+#include "shape.h"
 #include <stdio.h>
 
-scene::scene()
-{
-  // Values for milestone
-  
-
-}
-
-scene::scene(string path)
+scene::scene(char* path)
 {
   readScene(path);
-  cam = camera(&this);
 }
 
-void scene::readScene(string path)
+void scene::readScene(char* path)
 {
   FILE *inputfile = fopen(path, "r");
   if (!inputfile) {
@@ -47,7 +40,7 @@ void scene::render()
   vec2 pixel;
   ray r;
   color c;
-  while (getSample(pixel)) {
+  while (getSample(&pixel)) {
 	r = cam.generateRay(pixel);
 	c = raytracer.trace(r);
 	f.put(pixel, c);
@@ -226,7 +219,7 @@ void scene::parsefile (FILE *fp) {
 	  glEnd() ;
 
 	}
-
+	*/
     /******************************************/
 
     /**************** TRANSFORMATIONS *********/
@@ -279,7 +272,7 @@ void scene::parsefile (FILE *fp) {
 	  glMatrixMode(GL_MODELVIEW) ;
       glPopMatrix() ;
 	}
-
+	*/
     /************************************************************/
 
     /********* MISCELLANEOUS IGNORED FOR OPENGL *******************/
@@ -299,7 +292,7 @@ void scene::parsefile (FILE *fp) {
 	   assert(!strcmp(command, "output")) ;
 	   fprintf(stderr, "Output image file set to: %s but ignored for OpenGL\n",out) ;
        }
-
+	*/
     /*************************************************/
 
     /***************  LIGHTS *******************/
@@ -348,7 +341,7 @@ void scene::parsefile (FILE *fp) {
        assert(!strcmp(command, "ambient")) ;
        glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambient) ; 
      }
-
+	*/
     /*******************************************************/
 
     /****************** MATERIALS ************************/
@@ -381,7 +374,7 @@ void scene::parsefile (FILE *fp) {
        assert(num == 4) ; assert (!strcmp(command, "emission")) ;
        glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emission) ;
      }
-
+	*/
     /*****************************************************/
 
     else {

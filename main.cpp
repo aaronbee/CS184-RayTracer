@@ -1,9 +1,9 @@
 
 #include "raytracer.h"
-#include <stdlib>
-#include <stdio>
-#include <string>
+#include <stdlib.h>
+#include <stdio.h>
 
 int main(int argc, char *argv[]) {
-  scene s(string(argv[1]));
+  scene s(argv[1]);
+  camera c(&s);
 }

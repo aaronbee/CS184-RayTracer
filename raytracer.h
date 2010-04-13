@@ -20,6 +20,7 @@ class raytracer;
 class ray
 {
 public:
+  ray();
   ray(const vec3 p, const vec3 d) : pos(p), dir(d) { }
   vec3 getPos() { return pos; }
   vec3 getDir() { return dir; }
@@ -38,6 +39,7 @@ public:
 class camera
 {
 public:
+  camera();
   camera(scene *s);
 
   ray generateRay(vec2 pixel);
@@ -51,9 +53,8 @@ private:
 class scene
 {
 public:
-  scene();
-  scene(string path);
-  void readScene(string path);
+  scene(char* path);
+  void readScene(char* path);
   int getWidth() { return width; }
   int getHeight() { return height; }
   int getFov() { return fov; }
@@ -70,6 +71,7 @@ private:
   int x, y;
   vector<shape*> objects;
   camera cam;
+  raytracer rt;
 
   void initialparse(FILE *fp);
   void parsefile(FILE *fp);
@@ -78,6 +80,7 @@ private:
 class color
 {
 public:
+  color();
   color(vec3 v) : values(v) { }
   color(double r, double g, double b) { values = vec3(r, g, b); }
   vec3 getValues() { return values; }
@@ -105,7 +108,11 @@ private:
 class raytracer
 {
 public:
-  static color trace(ray r);
+  raytracer();
+  raytracer(vector<shape*> *s) : shapes(s) { }
+  color trace(ray r);
+private:
+  vector<shape*> *shapes;
 };
 
 #endif
