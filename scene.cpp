@@ -1,11 +1,24 @@
 
 #include "raytracer.h"
 
+scene::scene()
+{
+  // Values for milestone
+
+
+}
+
+scene::scene(string path)
+{
+  readScene(path);
+  cam = camera(&this);
+}
+
 void scene::readScene(string path)
 {
 }
 
-bool sample::getSample(vec2 *pixel)
+bool scene::getSample(vec2 *pixel)
 {
   if (y == height)
 	return false;
@@ -18,6 +31,18 @@ bool sample::getSample(vec2 *pixel)
   x ++;
 
   return true;
+}
+
+void scene::render()
+{
+  vec2 pixel;
+  ray r;
+  color c;
+  while (getSample(pixel)) {
+	r = cam.generateRay(pixel);
+	c = raytracer.trace(r);
+	f.put(pixel, c);
+  }
 }
 
 

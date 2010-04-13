@@ -15,6 +15,7 @@ class scene;
 class camera;
 class color;
 class film;
+class raytracer;
 
 class ray
 {
@@ -37,6 +38,8 @@ public:
 class scene
 {
 public:
+  scene();
+  scene(string path);
   void readScene(string path);
   int getWidth() { return width; }
   int getHeight() { return height; }
@@ -51,7 +54,8 @@ private:
   int fov;
   vec3 cameraPos;
   int x, y;
-
+  vector<*shape> objects;
+  camera cam;
 }
 
 class camera
@@ -91,7 +95,13 @@ public:
   void writeToFile(string path);
 
 private:
-  vector<vector<color> > pixels;
+  vector<vector<color> > *pixels;
+}
+
+class raytracer
+{
+public:
+  static color trace(ray r);
 }
 
 #endif
