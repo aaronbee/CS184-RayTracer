@@ -44,6 +44,8 @@ public:
   vec3 getCameraPos() { return cameraPos; }
   bool getSample(vec2 *pixel);
 
+  void render();
+
 private:
   int width, height;
   int fov;
@@ -57,7 +59,7 @@ class camera
 public:
   camera(scene *s);
 
-  ray generateRay();
+  ray generateRay(vec2 pixel);
 
 private:
   vec3 u, v, w;
