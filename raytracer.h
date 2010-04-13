@@ -12,6 +12,7 @@ class ray;
 class shape;
 class scene;
 class camera;
+class color;
 
 class ray
 {
@@ -60,6 +61,21 @@ private:
   vec3 u, v, w;
   scene *scn;
   int fovx, fovy;
+}
+
+class color
+{
+public:
+  color(vec3 v) : values(v) { }
+  color(double r, double g, double b) { values = vec3(r, g, b); }
+  vec3 getValues() { return values; }
+  double getR() { return values[0]; }
+  double getG() { return values[1]; }
+  double getB() { return values[2]; }
+
+
+private:
+  vec3 values;
 }
 
 #endif
