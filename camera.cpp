@@ -5,7 +5,7 @@
 camera::camera(scene *s) : scn(s)
 {
   w = scn->getCameraPos().normalize();
-  u = w ^ cameraUp();
+  u = w ^ scn->getCameraUp();
   u.normalize();
   v = w ^ u;
 

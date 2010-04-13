@@ -27,13 +27,13 @@ public:
 private:
   vec3 pos;
   vec3 dir;
-}
+};
 
 class shape
 {
 public:
   virtual bool intersect(ray r);
-}
+};
 
 class camera
 {
@@ -46,7 +46,7 @@ private:
   vec3 u, v, w;
   scene *scn;
   int fovx, fovy;
-}
+};
 
 class scene
 {
@@ -58,6 +58,7 @@ public:
   int getHeight() { return height; }
   int getFov() { return fov; }
   vec3 getCameraPos() { return cameraPos; }
+  vec3 getCameraUp() { return cameraUp; }
   bool getSample(vec2 *pixel);
 
   void render();
@@ -72,7 +73,7 @@ private:
 
   void initialparse(FILE *fp);
   void parsefile(FILE *fp);
-}
+};
 
 class color
 {
@@ -87,7 +88,7 @@ public:
 
 private:
   vec3 values;
-}
+};
 
 class film
 {
@@ -99,12 +100,12 @@ public:
 
 private:
   vector<vector<color> > *pixels;
-}
+};
 
 class raytracer
 {
 public:
   static color trace(ray r);
-}
+};
 
 #endif
