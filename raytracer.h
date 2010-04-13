@@ -39,11 +39,14 @@ public:
   int getHeight() { return height; }
   int getFov() { return fov; }
   vec3 getCameraPos() { return cameraPos; }
+  bool getSample(vec2 *pixel);
 
 private:
   int width, height;
   int fov;
   vec3 cameraPos;
+  int x, y;
+
 }
 
 class camera
@@ -56,10 +59,7 @@ public:
 private:
   vec3 u, v, w;
   scene *scn;
-  int x, y;
   int fovx, fovy;
-
-  bool getSample(vec2 *pixel);
 }
 
 #endif
