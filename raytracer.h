@@ -6,11 +6,12 @@
 #define RAYTRACERH
 
 #include "algebra3.h"
-#include <string>
+#include <string.h>
 
 class ray;
 class shape;
 class scene;
+class camera;
 
 class ray
 {
@@ -34,6 +35,13 @@ public:
   void readScene(string path);
 
   // variables to hold things in the scene
+}
+
+class camera
+{
+public:
+  ray generateRay();
+
 }
 
 #endif
