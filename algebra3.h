@@ -92,7 +92,7 @@ vec2& operator -= ( const vec2& v );	// decrementation by a vec2
 vec2& operator *= ( const double d );	// multiplication by a constant
 vec2& operator /= ( const double d );	// division by a constant
 double& operator [] ( int i);			// indexing
-double vec2::operator [] ( int i) const;// read-only indexing
+//double vec2::operator [] ( int i) const;// read-only indexing
 
 // special functions
 
@@ -477,10 +477,10 @@ inline double& vec2::operator [] ( int i) {
     return n[i];
 }
 
-inline double vec2::operator [] ( int i) const {
-    assert(!(i < VX || i > VY));
-    return n[i];
-}
+//inline double vec2::operator [] ( int i) const {
+//    assert(!(i < VX || i > VY));
+//    return n[i];
+//}
 
 
 // SPECIAL FUNCTIONS
@@ -1233,7 +1233,7 @@ inline mat3 identity2D()
 {   return mat3(vec3(1.0, 0.0, 0.0),
 		vec3(0.0, 1.0, 0.0),
 		vec3(0.0, 0.0, 1.0)); }
-
+/*
 inline mat3 translation2D(const vec2& v)
 {   return mat3(vec3(1.0, 0.0, v[VX]),
 		vec3(0.0, 1.0, v[VY]),
@@ -1253,7 +1253,7 @@ inline mat3 scaling2D(const vec2& scaleVector)
 {   return mat3(vec3(scaleVector[VX], 0.0, 0.0),
 		vec3(0.0, scaleVector[VY], 0.0),
 		vec3(0.0, 0.0, 1.0)); }
-
+*/
 inline mat4 identity3D()
 {   return mat4(vec4(1.0, 0.0, 0.0, 0.0),
 		vec4(0.0, 1.0, 0.0, 0.0),

@@ -1,10 +1,11 @@
 
 #include "raytracer.h"
+#include <stdio.h>
 
 scene::scene()
 {
   // Values for milestone
-
+  
 
 }
 
@@ -16,6 +17,14 @@ scene::scene(string path)
 
 void scene::readScene(string path)
 {
+  FILE *inputfile = fopen(path, "r");
+  if (!inputfile) {
+	cerr << "Bad input file path" << endl;
+	exit(1);
+  }
+  initialparse(inputfile);
+  parsefile(inputfile);
+  fclose(inputfile);
 }
 
 bool scene::getSample(vec2 *pixel)
@@ -46,7 +55,7 @@ void scene::render()
 }
 
 
-void initialparse (FILE *fp) {
+void scene::initialparse (FILE *fp) {
   char line[1000], command[1000] ; // Very bad to prefix array size :-)
 
   while (1) {
@@ -62,17 +71,16 @@ void initialparse (FILE *fp) {
 
     // The first line should be the size command setting the image size
     assert(!strcmp(command, "size")) ;
-    int num = sscanf(line, "%s %d %d", command, &sizex, &sizey) ;
+    int num = sscanf(line, "%s %d %d", command, &width, &height) ;
     assert(num == 3) ;
     assert(!strcmp(command, "size")) ;
-    initwindow() ;
 }
 
-void parsefile (FILE *fp) {
+void scene::parsefile (FILE *fp) {
   char line[1000], command[1000] ; // Very bad to prefix array size :-)
   int sizeset = 0 ;
 
-  initdefaults() ;
+  //  initdefaults() ;
   
   while (!feof(fp)) {
     fgets(line,sizeof(line),fp) ;
@@ -88,33 +96,27 @@ void parsefile (FILE *fp) {
     /**************        CAMERA LOCATION **********/
   
     if (!strcmp(command, "camera")) {
-      double lookfrom[3], lookat[3], up[3], fov ;
+      double lookfrom[3], lookat[3], up[3], _fov ;
       int num = sscanf(line, "%s %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf", 
-		       command, lookfrom, lookfrom+1, lookfrom+2, 
-		       lookat, lookat+1, lookat+2, up, up+1, up+2, &fov) ;
+					   command, lookfrom, lookfrom+1, lookfrom+2, 
+					   lookat, lookat+1, lookat+2, up, up+1, up+2, &_fov) ;
       if (num != 11) {
-	fprintf(stderr, "camera from[3] at[3] up[3] fov\n") ;
-	exit(1) ;
+		fprintf(stderr, "camera from[3] at[3] up[3] fov\n") ;
+		exit(1) ;
       }
 
       assert(!strcmp(command,"camera")) ;
 
-      // Set up modelview and projection matrices per camera parameters
-
-      glMatrixMode(GL_MODELVIEW) ;
-      glLoadIdentity() ;
-      gluLookAt(lookfrom[0], lookfrom[1], lookfrom[2], 
-		lookat[0], lookat[1], lookat[2], 
-		up[0], up[1], up[2] ) ;
-      glMatrixMode(GL_PROJECTION) ;
-	  glLoadIdentity() ;
-      gluPerspective(fov, (double) sizex / (double) sizey, 1.0, 10.0) ;
+	  cameraPos = vec3(lookfrom[0], lookfrom[1], lookfrom[2]);
+	  cameraUp = vec3(up[0], up[1], up[2]);
+	  cameraLookAt = vec3(lookat[0], lookat[1], lookat[2]);
+	  fov = _fov;
     }
 
     /****************************************/
 
     /***********  GEOMETRY *******************/
-
+	
     else if (!strcmp(command, "sphere")) {
 	  double radius ; // Syntax is sphere x y z radius 
 	  double pos[3] ;
@@ -124,20 +126,10 @@ void parsefile (FILE *fp) {
 		exit(1) ;
 	  }
 
-	  glMatrixMode(GL_MODELVIEW) ;
-	  glPushMatrix() ;
-	  glTranslatef(pos[0], pos[1], pos[2]) ;
+	  objects.push_back(new Sphere(vec3(pos[0], pos[1], pos[2]), radius));
 
-	  GLUquadricObj * qobj ;
-	  qobj = gluNewQuadric() ;
-      assert(qobj) ;
-      gluQuadricOrientation(qobj, GLU_OUTSIDE) ;
-//	  glColor3f(1.0,1.0,1.0) ;
-	  gluSphere(qobj,radius,40,40) ; // Draw sphere with stacks in lat-long
-	  glMatrixMode(GL_MODELVIEW) ;
-	  glPopMatrix() ;
-    }
-
+	}
+	/*
 	else if (!strcmp(command, "maxverts")) {
 	  int num = sscanf(line, "%s %d", command, &maxverts) ;
 	  assert(num == 2) ; assert(maxverts > 0) ;
@@ -239,6 +231,7 @@ void parsefile (FILE *fp) {
 
     /**************** TRANSFORMATIONS *********/
 
+	/*
 	else if (!strcmp(command, "translate")) {
 	  double x,y,z ; // Translate by x y z as in standard OpenGL
 
@@ -290,7 +283,7 @@ void parsefile (FILE *fp) {
     /************************************************************/
 
     /********* MISCELLANEOUS IGNORED FOR OPENGL *******************/
-     
+	/*
         else if (!strcmp(command, "maxdepth")) {
 	  int num = sscanf(line, "%s %d", command, &maxdepth) ;
 	  assert(num == 2) ;
@@ -310,7 +303,7 @@ void parsefile (FILE *fp) {
     /*************************************************/
 
     /***************  LIGHTS *******************/
-
+	/*
        else if (!strcmp(command, "directional")) {
 	 float direction[4], color[4] ; color[3] = 1.0 ; direction[3] = 0.0 ;
 	 int num = sscanf(line, "%s %f %f %f %f %f %f", command, direction, direction+1, direction+2, color, color+1, color+2) ;
@@ -359,7 +352,7 @@ void parsefile (FILE *fp) {
     /*******************************************************/
 
     /****************** MATERIALS ************************/
-
+	/*
      else if (!strcmp(command, "diffuse")) {
        float diffuse[4] ; diffuse[3] = 1.0 ;
        int num = sscanf(line, "%s %f %f %f", command, diffuse, diffuse+1, diffuse+2) ;
@@ -395,11 +388,5 @@ void parsefile (FILE *fp) {
       fprintf(stderr, "Unimplemented command: %s\n", command) ;
       exit(1) ;
     }
-    GLenum g = glGetError() ;
-    if (g != GL_NO_ERROR) {
-      fprintf(stderr, "Error: %d\n",g) ;
-      exit(1) ;
-    }
-
   }
 }

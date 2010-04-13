@@ -6,8 +6,8 @@
 #define RAYTRACERH
 
 #include "algebra3.h"
-#include <string.h>
-#include <vector.h>
+#include <string>
+#include <vector>
 
 class ray;
 class shape;
@@ -35,6 +35,19 @@ public:
   virtual bool intersect(ray r);
 }
 
+class camera
+{
+public:
+  camera(scene *s);
+
+  ray generateRay(vec2 pixel);
+
+private:
+  vec3 u, v, w;
+  scene *scn;
+  int fovx, fovy;
+}
+
 class scene
 {
 public:
@@ -52,23 +65,13 @@ public:
 private:
   int width, height;
   int fov;
-  vec3 cameraPos;
+  vec3 cameraPos, cameraUp, cameraLookAt;
   int x, y;
-  vector<*shape> objects;
+  vector<shape*> objects;
   camera cam;
-}
 
-class camera
-{
-public:
-  camera(scene *s);
-
-  ray generateRay(vec2 pixel);
-
-private:
-  vec3 u, v, w;
-  scene *scn;
-  int fovx, fovy;
+  void initialparse(FILE *fp);
+  void parsefile(FILE *fp);
 }
 
 class color

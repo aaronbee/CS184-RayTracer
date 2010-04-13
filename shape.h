@@ -4,6 +4,7 @@
 
 class Sphere : public shape {
 public:
+  Sphere(vec3 c, double r) : center(c), radius(r) { }
   
   /* Check if the ray r intersects the sphere.
    */
