@@ -1,6 +1,5 @@
 #include <math.h>
 #include "raytracer.h"
-#include "algebra3.h"
 
 class Sphere : public Shape {
 public:

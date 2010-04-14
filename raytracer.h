@@ -18,7 +18,7 @@ class Film;
 class RayTracer;
 
 // Global scene
-//Scene *scene;
+Scene *scene;
 
 class Ray
 {
