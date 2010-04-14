@@ -6,7 +6,7 @@ camera.o : camera.cpp raytracer.h
 	${CC} ${CFLAGS} -c camera.cpp
 
 film.o : film.cpp raytracer.h
-	${CC} ${CFLAGS} -c camera.cpp
+	${CC} ${CFLAGS} -c film.cpp
 
 scene.o : scene.cpp raytracer.h
 	${CC} ${CFLAGS} -c scene.cpp
@@ -20,4 +20,4 @@ raytracer : main.o camera.o film.o scene.o
 all : raytracer
 
 clean :
-	rm -rf *o raytracer
+	rm -rf *o *~ raytracer

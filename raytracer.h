@@ -9,19 +9,22 @@
 #include <string>
 #include <vector>
 
-class ray;
-class shape;
-class scene;
-class camera;
-class color;
-class film;
-class raytracer;
+class Ray;
+class Shape;
+class Scene;
+class Camera;
+class Color;
+class Film;
+class RayTracer;
 
-class ray
+// Global scene
+//Scene *scene;
+
+class Ray
 {
 public:
-  ray();
-  ray(const vec3 p, const vec3 d) : pos(p), dir(d) { }
+  Ray();
+  Ray(const vec3 p, const vec3 d) : pos(p), dir(d) { }
   vec3 getPos() { return pos; }
   vec3 getDir() { return dir; }
 
@@ -30,30 +33,28 @@ private:
   vec3 dir;
 };
 
-class shape
+class Shape
 {
 public:
-  virtual bool intersect(ray r);
+  virtual bool intersect(Ray r);
 };
 
-class camera
+class Camera
 {
 public:
-  camera();
-  camera(scene *s);
+  Camera();
 
-  ray generateRay(vec2 pixel);
+  Ray generateRay(vec2 pixel);
 
 private:
   vec3 u, v, w;
-  scene *scn;
   int fovx, fovy;
 };
 
-class scene
+class Scene
 {
 public:
-  scene(char* path);
+  Scene(char* path);
   void readScene(char* path);
   int getWidth() { return width; }
   int getHeight() { return height; }
@@ -69,20 +70,21 @@ private:
   int fov;
   vec3 cameraPos, cameraUp, cameraLookAt;
   int x, y;
-  vector<shape*> objects;
-  camera cam;
-  raytracer rt;
+  vector<Shape*> *objects;
+  Camera *cam;
+  RayTracer *rt;
+  Film *film;
 
   void initialparse(FILE *fp);
   void parsefile(FILE *fp);
 };
 
-class color
+class Color
 {
 public:
-  color();
-  color(vec3 v) : values(v) { }
-  color(double r, double g, double b) { values = vec3(r, g, b); }
+  Color();
+  Color(vec3 v) : values(v) { }
+  Color(double r, double g, double b) { values = vec3(r, g, b); }
   vec3 getValues() { return values; }
   double getR() { return values[0]; }
   double getG() { return values[1]; }
@@ -93,26 +95,23 @@ private:
   vec3 values;
 };
 
-class film
+class Film
 {
 public:
-  film(int width, int height);
-  void put(vec2 pixel, color c);
-  color get(vec2 pixel);
+  Film(int width, int height);
+  void put(vec2 pixel, Color c);
+  Color get(vec2 pixel);
   void writeToFile(string path);
 
 private:
-  vector<vector<color> > *pixels;
+  vector<vector<Color> > pixels;
 };
 
-class raytracer
+class RayTracer
 {
 public:
-  raytracer();
-  raytracer(vector<shape*> *s) : shapes(s) { }
-  color trace(ray r);
-private:
-  vector<shape*> *shapes;
+  RayTracer();
+  Color trace(Ray r);
 };
 
 #endif

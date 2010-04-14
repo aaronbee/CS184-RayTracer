@@ -3,7 +3,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+Scene *scene;
+
 int main(int argc, char *argv[]) {
-  scene s(argv[1]);
-  camera c(&s);
+  scene = new Scene(argv[1]);
 }

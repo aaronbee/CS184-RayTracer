@@ -3,12 +3,16 @@
 #include "shape.h"
 #include <stdio.h>
 
-scene::scene(char* path)
+Scene::Scene(char* path)
 {
+  objects = new vector<Shape *>();
   readScene(path);
+  cam = new Camera();
+  rt = new RayTracer();
+  film = new Film(width, height);
 }
 
-void scene::readScene(char* path)
+void Scene::readScene(char* path)
 {
   FILE *inputfile = fopen(path, "r");
   if (!inputfile) {
@@ -20,7 +24,7 @@ void scene::readScene(char* path)
   fclose(inputfile);
 }
 
-bool scene::getSample(vec2 *pixel)
+bool Scene::getSample(vec2 *pixel)
 {
   if (y == height)
 	return false;
@@ -35,20 +39,20 @@ bool scene::getSample(vec2 *pixel)
   return true;
 }
 
-void scene::render()
+void Scene::render()
 {
   vec2 pixel;
-  ray r;
-  color c;
+  Ray r;
+  Color c;
   while (getSample(&pixel)) {
-	r = cam.generateRay(pixel);
-	c = raytracer.trace(r);
-	f.put(pixel, c);
+	r = cam->generateRay(pixel);
+	c = rt->trace(r);
+	film->put(pixel, c);
   }
 }
 
 
-void scene::initialparse (FILE *fp) {
+void Scene::initialparse (FILE *fp) {
   char line[1000], command[1000] ; // Very bad to prefix array size :-)
 
   while (1) {
@@ -69,9 +73,9 @@ void scene::initialparse (FILE *fp) {
     assert(!strcmp(command, "size")) ;
 }
 
-void scene::parsefile (FILE *fp) {
+void Scene::parsefile (FILE *fp) {
   char line[1000], command[1000] ; // Very bad to prefix array size :-)
-  int sizeset = 0 ;
+  //  int sizeset = 0 ;
 
   //  initdefaults() ;
   
@@ -119,7 +123,7 @@ void scene::parsefile (FILE *fp) {
 		exit(1) ;
 	  }
 
-	  objects.push_back(new Sphere(vec3(pos[0], pos[1], pos[2]), radius));
+	  objects->push_back(new Sphere(vec3(pos[0], pos[1], pos[2]), radius));
 
 	}
 	/*

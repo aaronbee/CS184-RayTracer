@@ -2,31 +2,33 @@
 #include "raytracer.h"
 #include <math.h>
 
-camera::camera(scene *s) : scn(s)
+extern Scene *scene;
+
+Camera::Camera()
 {
-  w = scn->getCameraPos().normalize();
-  u = w ^ scn->getCameraUp();
+  w = scene->getCameraPos().normalize();
+  u = w ^ scene->getCameraUp();
   u.normalize();
   v = w ^ u;
 
-  fovy = scn->getFov();
-  fovx = ((double) scn->getWidth() / (double) scn->getHeight()) * fovy;
+  fovy = scene->getFov();
+  fovx = ((double) scene->getWidth() / (double) scene->getHeight()) * fovy;
 }
 
-ray camera::generateRay(vec2 pixel)
+Ray Camera::generateRay(vec2 pixel)
 {
   double alpha, beta;
   vec3 dir;
-  int width = scn->getWidth();
-  int height = scn->getHeight();
+  int width = scene->getWidth();
+  int height = scene->getHeight();
   alpha = tan(fovx / 2) * (pixel[0] - (width / 2)) / (width / 2);
   beta = tan(fovy / 2) * ((height / 2) - pixel[1]) / (height / 2);
 
   dir = (alpha * u) + (beta * v) - w;
   dir.normalize();
-  dir += scn->getCameraPos();
+  dir += scene->getCameraPos();
 
-  ray rtn = ray(scn->getCameraPos(), dir);
+  Ray rtn = Ray(scene->getCameraPos(), dir);
 
   return rtn;
 }

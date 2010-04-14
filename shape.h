@@ -2,13 +2,13 @@
 #include "raytracer.h"
 #include "algebra3.h"
 
-class Sphere : public shape {
+class Sphere : public Shape {
 public:
   Sphere(vec3 c, double r) : center(c), radius(r) { }
   
   /* Check if the ray r intersects the sphere.
    */
-  bool intersect(ray r) {
+  bool intersect(Ray r) {
     // break the ray into position and direction
     // ray p = p_o + p_d (t)
     
@@ -38,12 +38,12 @@ private:
 
 
   
-class Triangle : public shape {
+class Triangle : public Shape {
 public:
   
   /* Check if the ray r intersects the triangle. 
    */
-  bool intersect(ray r) {
+  bool intersect(Ray r) {
     //find the normal (this defines a plane)
     vec3 normal = (b - a) ^ (c - a);
     
