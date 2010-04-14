@@ -7,6 +7,10 @@ Scene::Scene(char* path)
 {
   shapes = new vector<Shape *>();
   readScene(path);
+}
+
+void Scene::init()
+{
   cam = new Camera();
   rt = new RayTracer();
   film = new Film();
@@ -28,13 +32,14 @@ bool Scene::getSample(vec2 *pixel)
 {
   if (y == height)
 	return false;
+
+  *pixel = vec2(x, y);
+  x ++;
+
   if (x == width) {
 	x = 0;
 	y ++;
   }
-
-  *pixel = vec2(x, y);
-  x ++;
 
   return true;
 }
@@ -45,6 +50,7 @@ void Scene::render()
   Ray r;
   Color c;
   while (getSample(&pixel)) {
+	cout << pixel[0] << " " << pixel[1] << endl;
 	r = cam->generateRay(pixel);
 	c = rt->trace(r);
 	film->put(pixel, c);
@@ -105,10 +111,10 @@ void Scene::parsefile (FILE *fp) {
 
       assert(!strcmp(command,"camera")) ;
 
-	  cameraPos = vec3(lookfrom[0], lookfrom[1], lookfrom[2]);
-	  cameraUp = vec3(up[0], up[1], up[2]);
-	  cameraLookAt = vec3(lookat[0], lookat[1], lookat[2]);
-	  fov = _fov;
+	  Scene::cameraPos = vec3(lookfrom[0], lookfrom[1], lookfrom[2]);
+	  Scene::cameraUp = vec3(up[0], up[1], up[2]);
+	  Scene::cameraLookAt = vec3(lookat[0], lookat[1], lookat[2]);
+	  Scene::fov = _fov;
     }
 
     /****************************************/

@@ -66,6 +66,7 @@ public:
   bool getSample(vec2 *pixel);
   vector<Shape *>* getShapes() { return shapes; }
 
+  void init();
   void render();
 
 private:

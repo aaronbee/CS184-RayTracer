@@ -24,7 +24,7 @@ void Film::writeToFile(string path)
 
   cout << "P3" << endl;
   cout << scene->getWidth() << " " << scene->getHeight() << endl;
-  cout << maxVal;
+  cout << maxVal << endl;
 
   for (int i = 0; i < scene->getHeight(); i ++) {
 	for (itr color = pixels[i].begin(); color != pixels[i].end(); color ++) {
