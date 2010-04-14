@@ -9,7 +9,7 @@ Scene::Scene(char* path)
   readScene(path);
   cam = new Camera();
   rt = new RayTracer();
-  film = new Film(width, height);
+  film = new Film();
 }
 
 void Scene::readScene(char* path)
@@ -49,6 +49,7 @@ void Scene::render()
 	c = rt->trace(r);
 	film->put(pixel, c);
   }
+  film->writeToFile("");
 }
 
 

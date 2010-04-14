@@ -8,6 +8,7 @@
 #include "algebra3.h"
 #include <string>
 #include <vector>
+#include <sstream>
 
 class Ray;
 class Shape;
@@ -91,7 +92,12 @@ public:
   double getR() { return values[0]; }
   double getG() { return values[1]; }
   double getB() { return values[2]; }
-
+  string toString(int maxVal) {
+    stringstream out;
+	out << values[0] * maxVal << " " << values[1] * maxVal << " "
+		<< values[2] * maxVal;
+	return out.str();
+  }
 
 private:
   vec3 values;
@@ -100,7 +106,7 @@ private:
 class Film
 {
 public:
-  Film(int width, int height);
+  Film();
   void put(vec2 pixel, Color c);
   Color get(vec2 pixel);
   void writeToFile(string path);
