@@ -2,8 +2,6 @@
 #include "raytracer.h"
 #include <math.h>
 
-extern Scene *scene;
-
 Camera::Camera()
 {
   w = scene->getCameraPos().normalize();

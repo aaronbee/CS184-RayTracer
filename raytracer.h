@@ -18,12 +18,12 @@ class Film;
 class RayTracer;
 
 // Global scene
-Scene *scene;
+extern Scene *scene;
 
 class Ray
 {
 public:
-  Ray();
+  Ray() { }
   Ray(const vec3 p, const vec3 d) : pos(p), dir(d) { }
   vec3 getPos() { return pos; }
   vec3 getDir() { return dir; }
@@ -36,7 +36,8 @@ private:
 class Shape
 {
 public:
-  virtual bool intersect(Ray r);
+  Shape() { }
+  virtual bool intersect(Ray r) { return false; }
 };
 
 class Camera
@@ -82,7 +83,7 @@ private:
 class Color
 {
 public:
-  Color();
+  Color() { };
   Color(vec3 v) : values(v) { }
   Color(double r, double g, double b) { values = vec3(r, g, b); }
   vec3 getValues() { return values; }
@@ -110,7 +111,7 @@ private:
 class RayTracer
 {
 public:
-  RayTracer();
+  RayTracer() { }
   Color trace(Ray r);
 };
 

@@ -39,7 +39,8 @@ private:
   
 class Triangle : public Shape {
 public:
-  
+  Triangle(vec3 _center, vec3 _a, vec3 _b, vec3 _c) : center(_center), a(_a), b(_b), c(_c) { }
+
   /* Check if the ray r intersects the triangle. 
    */
   bool intersect(Ray r) {
@@ -63,7 +64,7 @@ public:
   }
   
 private:
-  vec3 origin;
+  vec3 center;
   vec3 a;
   vec3 b;
   vec3 c;
