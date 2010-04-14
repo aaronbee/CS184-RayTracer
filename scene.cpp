@@ -5,7 +5,7 @@
 
 Scene::Scene(char* path)
 {
-  objects = new vector<Shape *>();
+  shapes = new vector<Shape *>();
   readScene(path);
   cam = new Camera();
   rt = new RayTracer();
@@ -123,7 +123,7 @@ void Scene::parsefile (FILE *fp) {
 		exit(1) ;
 	  }
 
-	  objects->push_back(new Sphere(vec3(pos[0], pos[1], pos[2]), radius));
+	  shapes->push_back(new Sphere(vec3(pos[0], pos[1], pos[2]), radius));
 
 	}
 	/*

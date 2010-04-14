@@ -1,7 +1,21 @@
 
 #include "raytracer.h"
 
+typedef vector<Shape *>::iterator shape_itr;
+
 Color RayTracer::trace(Ray r)
 {
-  return Color(0, 0, 0);
+  Color red = Color(1.0, 0, 0);
+  Color black = Color(0, 0, 0);
+
+  shape_itr it = scene->getShapes()->begin();
+  shape_itr end = scene->getShapes()->end();
+
+  for ( ; it != end; it ++) {
+	if ((*it)->intersect(r)) {
+		return red;
+	  }
+  }
+  
+  return black;
 }

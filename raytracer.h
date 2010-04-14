@@ -63,6 +63,7 @@ public:
   vec3 getCameraPos() { return cameraPos; }
   vec3 getCameraUp() { return cameraUp; }
   bool getSample(vec2 *pixel);
+  vector<Shape *>* getShapes() { return shapes; }
 
   void render();
 
@@ -71,7 +72,7 @@ private:
   int fov;
   vec3 cameraPos, cameraUp, cameraLookAt;
   int x, y;
-  vector<Shape*> *objects;
+  vector<Shape *> *shapes;
   Camera *cam;
   RayTracer *rt;
   Film *film;
