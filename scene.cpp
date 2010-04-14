@@ -50,7 +50,6 @@ void Scene::render()
   Ray r;
   Color c;
   while (getSample(&pixel)) {
-	cout << pixel[0] << " " << pixel[1] << endl;
 	r = cam->generateRay(pixel);
 	c = rt->trace(r);
 	film->put(pixel, c);
