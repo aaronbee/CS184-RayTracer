@@ -1,13 +1,16 @@
 #include <math.h>
 #include "raytracer.h"
 
+typedef vector<Light *>::iterator light_itr;
+
 class Sphere : public Shape {
 public:
   Sphere(vec3 c, double r) : center(c), radius(r) { }
   
-  /* Check if the ray r intersects the sphere.
+  /* return the intersection point of ray r with self,
+   * or NULL if no intersection.
    */
-  bool intersect(Ray r) {
+  vec3 intersect(Ray r) {
     // break the ray into position and direction
     // ray p = p_o + p_d (t)
     
@@ -19,15 +22,63 @@ public:
     double a = r.getDir() * r.getDir();
     double discrim = pow(b,2.0) - 4 * a * c;
     
-    if (discrim < 0.0) { return false; }
-    return true;
+    if (discrim < 0.0) { return NULL; }
     
     //a negative?
-    //s1 = (-b + sqrt(d))/2a;
-    //s2 = (-b - sqrt(d))/2a;
-    //two positive: pick smaller
-    //both same: tangent
-    //one pos one neg: ray origin inside sphere (pick +)
+    double s1 = (-b + sqrt(discrim))/2*a;
+    double s2 = (-b - sqrt(discrim))/2*a;
+    
+    
+    //the distance
+    double d;
+    
+    //both positive roots
+    if (s1 > 0 && s2 > 0) {
+      //pick smaller one
+     if (s1 < s2 || s1 == s2) {
+       d = s1;
+       } 
+      else {
+        d = s2;
+      }
+    }
+    //one positive root is s1
+    else if (s1 > 0) {
+      d = s1;
+    }
+    //one positive root is s2
+    else if (s2 > 0) {
+      d = s2;
+    }
+    else {
+      return NULL;
+    }
+    
+    //d isthe distance
+    vec3 intersection = r.getPos() + d * r.getDir();
+    return intersection;
+  }
+  Color hit(Ray r) {
+    vec3 i = intersect(r);
+    if (i == NULL) return Color(0,0,0);
+    
+    vec3 normal = i - center;
+    normal.normalize();
+    
+    //find a ray from the intersection point to every light
+
+    light_itr it = scene->getLights()->begin();
+    light_itr end = scene->getLights()->end();
+
+    for ( ; it != end; it ++) {
+      //find a vector from i to the light position
+      vec3 shadowray = i - it.
+      //normalize it
+      //take the cosine of the dot product
+    }
+    
+    
+    return Color(1.0,1.0,1.0);
   }
   
 private:
@@ -43,7 +94,7 @@ public:
 
   /* Check if the ray r intersects the triangle. 
    */
-  bool intersect(Ray r) {
+  vec3 intersect(Ray r) {
     //find the normal (this defines a plane)
     vec3 normal = (b - a) ^ (c - a);
   
@@ -62,6 +113,11 @@ public:
       return true;
     }
     return false;
+  }
+  
+  Color hit(Ray r) {
+    return Color(0,0,0); 
+    
   }
   
 private:

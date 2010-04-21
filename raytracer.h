@@ -34,27 +34,6 @@ private:
   vec3 dir;
 };
 
-class Shape
-{
-public:
-  Shape() { }
-  virtual bool intersect(Ray r) { return false; }
-};
-
-
-
-class Camera
-{
-public:
-  Camera();
-
-  Ray generateRay(vec2 pixel);
-
-private:
-  vec3 u, v, w;
-  double fovx, fovy; // in radians
-};
-
 class Color
 {
 public:
@@ -76,15 +55,36 @@ private:
   vec3 values;
 };
 
+class Shape
+{
+public:
+  Shape() { }
+  virtual vec3 intersect(Ray r) { return false; }
+  virtual Color hit(Ray r) { return Color(0,0,0); }
+};
+
+
+
+class Camera
+{
+public:
+  Camera();
+
+  Ray generateRay(vec2 pixel);
+
+private:
+  vec3 u, v, w;
+  double fovx, fovy; // in radians
+};
+
+
+
 //superclass of directional and point lights
 class Light
 {
 public:
   Light() { }
-  
-private:
-  vec3 loc;
-  Color color;
+
 };
 
 class Scene
@@ -100,6 +100,8 @@ public:
   vec3 getCameraLookAt() { return cameraLookAt; }
   bool getSample(vec2 *pixel);
   vector<Shape *>* getShapes() { return shapes; }
+  vector<Light *>* getLights() { return lights; }
+  
 
   void init();
   void render();
@@ -111,6 +113,7 @@ private:
   int x, y;
   vector<Shape *> *shapes;
   vector<Light *> *lights;
+  
   Camera *cam;
   RayTracer *rt;
   Film *film;

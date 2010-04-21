@@ -1,11 +1,16 @@
 
 #include "raytracer.h"
 #include "shape.h"
+#include "light.h"
 #include <stdio.h>
 
 Scene::Scene(char* path)
 {
   shapes = new vector<Shape *>();
+  lights = new vector<Light *>();
+  
+  lights->push_back(new PointLight(vec3(4,4,4), Color(0,0,0) ));
+  
   outputPath = string("test.png");
   readScene(path);
 }
