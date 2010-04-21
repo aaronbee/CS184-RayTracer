@@ -265,7 +265,7 @@ void Scene::parsefile (FILE *fp) {
 
     /**************** TRANSFORMATIONS *********/
 
-	/*
+
 	else if (!strcmp(command, "translate")) {
 	  double x,y,z ; // Translate by x y z as in standard OpenGL
 
@@ -274,10 +274,12 @@ void Scene::parsefile (FILE *fp) {
 		fprintf(stderr, "translate x y z\n") ;
 		exit(1) ;
 	  }
-	  glMatrixMode(GL_MODELVIEW) ;
-	  glTranslatef(x,y,z) ;
+	  vec3 t = vec3(x, y, z);
+	  mat4 m = transformations.top() * translation3D(t);
+	  transformations.pop();
+	  transformations.push(m);
 	}
-
+	/*
 	else if (!strcmp(command, "rotate")) {
 	  double ang, x,y,z ; // Rotate by an angle about axis x y z as in standard OpenGL
 
@@ -309,7 +311,11 @@ void Scene::parsefile (FILE *fp) {
 
 	else if (!strcmp(command, "popTransform")) {
 	  // Pop the current matrix as in OpenGL
-	  transformations.pop();
+	  if (transformations.size() == 1) {
+		cerr << "Cannot pop anymore." << endl;
+	  } else {
+		transformations.pop();
+	  }
 	}
 
     /************************************************************/
