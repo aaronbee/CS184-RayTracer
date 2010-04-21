@@ -26,7 +26,7 @@ void Film::writeToFile(string path)
   FreeImage_Initialise();
   FIBITMAP* bitmap = FreeImage_Allocate(scene->getWidth(),
 										scene->getHeight(),
-										24);
+										bpp);
   RGBQUAD rgb;
 
   if (!bitmap) {
@@ -38,15 +38,15 @@ void Film::writeToFile(string path)
 	vector<Color> row = pixels[y];
 	for (int x = 0; x < scene->getWidth(); x ++) {
 	  Color color = row[x];
-	  rgb.rgbRed = color.getR();
-	  rgb.rgbGreen = color.getG();
-	  rgb.rgbBlue = color.getB();
+	  rgb.rgbRed = color.getR() * maxVal;
+	  rgb.rgbGreen = color.getG() * maxVal;
+	  rgb.rgbBlue = color.getB() * maxVal;
 
 	  FreeImage_SetPixelColor(bitmap, x, y, &rgb);
 	}
   }
 	 
-  if (FreeImage_Save(FIF_PNG, bitmap, path, 0)) {
+  if (FreeImage_Save(FIF_PNG, bitmap, path.c_str(), 0)) {
 	cout << "Image saved to " << path << endl;
   }
   else {
@@ -55,15 +55,4 @@ void Film::writeToFile(string path)
   }
 
   FreeImage_DeInitialise();
-  /*
-  cout << "P3" << endl;
-  cout << scene->getWidth() << " " << scene->getHeight() << endl;
-  cout << maxVal << endl;
-
-	  cout << color->toString(maxVal) << " ";
-	}
-	cout << endl;
-	}*/
-  
-  
 }
