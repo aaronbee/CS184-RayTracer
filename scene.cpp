@@ -200,8 +200,16 @@ void Scene::parsefile (FILE *fp) {
 	 for (i = 0 ; i < 3 ; i++) {
 	   assert(pts[i] >= 0 && pts[i] < maxverts) ;
 	 }
-	 shapes->push_back(new Triangle(*vert[pts[0]], *vert[pts[1]], *vert[pts[2]],
-									curDiffuse, curSpecular, curEmission, curShininess));
+	 vec4 temp0, temp1, temp2;
+	 temp0 = vec4(*vert[pts[0]]);
+	 temp1 = vec4(*vert[pts[1]]);
+	 temp2 = vec4(*vert[pts[2]]);
+	 vec3 vert0 = vec3(transformations.top() * temp0);
+	 vec3 vert1 = vec3(transformations.top() * temp1);
+	 vec3 vert2 = vec3(transformations.top() * temp2);
+
+	 shapes->push_back(new Triangle(vert0, vert1, vert2, curDiffuse,
+									curSpecular, curEmission, curShininess));
 
   }
   /*
