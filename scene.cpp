@@ -54,7 +54,7 @@ void Scene::render()
 	c = rt->trace(r);
 	film->put(pixel, c);
   }
-  film->writeToFile("");
+  film->writeToFile("test.png");
 }
 
 
