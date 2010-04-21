@@ -41,6 +41,8 @@ public:
   virtual bool intersect(Ray r) { return false; }
 };
 
+
+
 class Camera
 {
 public:
@@ -51,6 +53,38 @@ public:
 private:
   vec3 u, v, w;
   int fovx, fovy;
+};
+
+class Color
+{
+public:
+  Color() { };
+  Color(vec3 v) : values(v) { }
+  Color(double r, double g, double b) { values = vec3(r, g, b); }
+  vec3 getValues() { return values; }
+  double getR() { return values[0]; }
+  double getG() { return values[1]; }
+  double getB() { return values[2]; }
+  string toString(int maxVal) {
+    stringstream out;
+	out << values[0] * maxVal << " " << values[1] * maxVal << " "
+		<< values[2] * maxVal;
+	return out.str();
+  }
+
+private:
+  vec3 values;
+};
+
+//superclass of directional and point lights
+class Light
+{
+public:
+  Light() { }
+  
+private:
+  vec3 loc;
+  Color color;
 };
 
 class Scene
@@ -76,6 +110,7 @@ private:
   vec3 cameraPos, cameraUp, cameraLookAt;
   int x, y;
   vector<Shape *> *shapes;
+  vector<Light *> *lights;
   Camera *cam;
   RayTracer *rt;
   Film *film;
@@ -85,26 +120,7 @@ private:
   void parsefile(FILE *fp);
 };
 
-class Color
-{
-public:
-  Color() { };
-  Color(vec3 v) : values(v) { }
-  Color(double r, double g, double b) { values = vec3(r, g, b); }
-  vec3 getValues() { return values; }
-  double getR() { return values[0]; }
-  double getG() { return values[1]; }
-  double getB() { return values[2]; }
-  string toString(int maxVal) {
-    stringstream out;
-	out << values[0] * maxVal << " " << values[1] * maxVal << " "
-		<< values[2] * maxVal;
-	return out.str();
-  }
 
-private:
-  vec3 values;
-};
 
 class Film
 {
