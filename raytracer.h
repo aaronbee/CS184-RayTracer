@@ -34,11 +34,43 @@ private:
   vec3 dir;
 };
 
+class Color
+{
+public:
+  Color() { };
+  Color(vec3 v) : values(v) { }
+  Color(double r, double g, double b) { values = vec3(r, g, b); }
+  vec3 getValues() { return values; }
+  double getR() { return values[0]; }
+  double getG() { return values[1]; }
+  double getB() { return values[2]; }
+  string toString(int maxVal) {
+    stringstream out;
+	out << values[0] * maxVal << " " << values[1] * maxVal << " "
+		<< values[2] * maxVal;
+	return out.str();
+  }
+
+private:
+  vec3 values;
+};
+
 class Shape
 {
 public:
   Shape() { }
   virtual bool intersect(Ray r) { return false; }
+
+  Color getDiffuse() { return diffuse; }
+  Color getSpecular() { return specular; }
+  Color getEmission() { return emission; }
+  double getShininess() { return shininess; }
+
+protected:
+  Color diffuse;
+  Color specular;
+  Color emission;
+  double shininess;
 };
 
 class Camera
@@ -85,26 +117,7 @@ private:
   void parsefile(FILE *fp);
 };
 
-class Color
-{
-public:
-  Color() { };
-  Color(vec3 v) : values(v) { }
-  Color(double r, double g, double b) { values = vec3(r, g, b); }
-  vec3 getValues() { return values; }
-  double getR() { return values[0]; }
-  double getG() { return values[1]; }
-  double getB() { return values[2]; }
-  string toString(int maxVal) {
-    stringstream out;
-	out << values[0] * maxVal << " " << values[1] * maxVal << " "
-		<< values[2] * maxVal;
-	return out.str();
-  }
 
-private:
-  vec3 values;
-};
 
 class Film
 {
