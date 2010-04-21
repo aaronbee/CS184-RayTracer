@@ -9,6 +9,7 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <stack>
 
 class Ray;
 class Shape;
@@ -106,6 +107,7 @@ public:
   bool getSample(vec2 *pixel);
   vector<Shape *>* getShapes() { return shapes; }
   int getMaxDepth() { return maxDepth; }
+  
 
   void init();
   void render();
@@ -121,6 +123,7 @@ private:
   Film *film;
   string outputPath;
   int maxDepth;
+  stack<mat4> transformations;
 
   void initialparse(FILE *fp);
   void parsefile(FILE *fp);

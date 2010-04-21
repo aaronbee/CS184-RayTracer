@@ -8,6 +8,7 @@ Scene::Scene(char* path)
   shapes = new vector<Shape *>();
   outputPath = string("test.png");
   maxDepth = 5;
+  transformations.push(identity3D());
   readScene(path);
 }
 
