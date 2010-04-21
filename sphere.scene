@@ -28,3 +28,4 @@ camera -4 -4 4 1 0 0 0 1 0 30
 # parts of the assignment.
 
 sphere 0 0 0 .5
+sphere 0 .5 0 .4

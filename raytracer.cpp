@@ -15,7 +15,11 @@ Color RayTracer::trace(Ray r)
 	//if ((*it)->intersect(r) != NULL) {
 	//	return red;
 	//  }
-    return (*it)->hit(r);
+    if ((*it)->intersect(r) != NULL) {
+      return (*it)->hit(r);
+    }
+    
+    
   }
   
   return black;
