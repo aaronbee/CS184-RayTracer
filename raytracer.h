@@ -78,6 +78,7 @@ private:
   Camera *cam;
   RayTracer *rt;
   Film *film;
+  string outputPath;
 
   void initialparse(FILE *fp);
   void parsefile(FILE *fp);
