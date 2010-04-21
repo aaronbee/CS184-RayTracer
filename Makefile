@@ -1,6 +1,6 @@
 CC = g++
 CFLAGS = -Wall -g
-LDFLAGS = -lm
+LDFLAGS = -L./ -lm -lfreeimage
 
 all : raytracer
 
