@@ -29,72 +29,45 @@ public:
     
     if (discrim < 0.0) { return NULL; }
     
-    //a negative?
     double s1 = (-b + sqrt(discrim))/2*a;
     double s2 = (-b - sqrt(discrim))/2*a;
     
+    double dist;
     
-    //the distance
-    double d;
-    
-    //both positive roots
     if (s1 > 0 && s2 > 0) {
-      //pick smaller one
-     if (s1 < s2 || s1 == s2) {
-       d = s1;
-       } 
-      else {
-        d = s2;
-      }
+      if (s1 < s2 || s1 == s2) { dist = s1; } 
+      else { dist = s2; }
     }
-    //one positive root is s1
-    else if (s1 > 0) {
-      d = s1;
-    }
-    //one positive root is s2
-    else if (s2 > 0) {
-      d = s2;
-    }
-    else {
-      return NULL;
-    }
+    else if (s1 > 0) { dist = s1; }
+    else if (s2 > 0) { dist = s2; }
+    else { return NULL; }
     
-    //d isthe distance
-    vec3 intersection = r.getPos() + d * r.getDir();
-    return intersection;
+    //assert(dist > 0.0);
+    return r.getPos() + dist * r.getDir();
   }
+
+  /* method hit returns the color of object this seen by ray r
+   * preconditions: none
+   * Directions:
+   * sphereCenter + normalVector = intersectionPoint
+   * intersectionPoint + shadowRay = lightPos
+   */  
   Color hit(Ray r) {
     vec3 i = intersect(r);
-    
     if (i == NULL) return Color(0,0,0);
-
-    
-    //center + normal = intersection
-    //normal = intersection - center
-    vec3 normal = i - center;
-    normal.normalize();
-    //cout << normal << endl;
-    //find a ray from the intersection point to every light
+    vec3 normal = (i - center).normalize();
 
     light_itr it = scene->getLights()->begin();
     light_itr end = scene->getLights()->end();
 
     for ( ; it != end; it ++) {
-      //find a vector from i to the light position
-      //shadowray, lightpos, i
-      //intersection + shadowray = lightpos
-      //shadowray = lightpos - intersection
       vec3 shadowray = (*it)->pos - i;
       shadowray.normalize();
-      
       double colour = shadowray * normal;
       if (colour <= 0.0) return Color(0,0,0);
       return Color(colour, colour, colour);
-
     }
-    
     return Color(0,0,0);
-    
   }
   
 private:
@@ -115,12 +88,12 @@ public:
    */
   vec3 intersect(Ray r) {
     //find the normal (this defines a plane)
-    vec3 normal = (b - a) ^ (c - a);
+    vec3 normal = ((b - a) ^ (c - a)).normalize();
   
     
     double distance = - ((r.getPos() - a) * normal) / ( r.getDir() * normal);
     //cout << distance;
-    if (distance < 0.0) { return false; }
+    if (distance < 0.0) { return NULL; }
     
     //the point where the ray intersects the plane is 
     vec3 p = r.getPos() + distance * r.getDir();
@@ -129,18 +102,29 @@ public:
     if    ((((b - a) ^ (p - a)) * normal >= 0.0)
 		   && (((c - b) ^ (p - b)) * normal >= 0.0)
 		   && (((a - c) ^ (p - c)) * normal >= 0.0)) {
-      return true;
+      return p;
     }
-    return false;
+    return NULL;
   }
   
-  Color hit(Ray r) {
-    return Color(0,0,0); 
-    
-  }
-  
+   Color hit(Ray r) {
+    vec3 i = intersect(r);
+    if (i == NULL) return Color(0,0,0);
+    vec3 normal = ((b-a) ^ (c-a)).normalize();
+
+    light_itr it = scene->getLights()->begin();
+    light_itr end = scene->getLights()->end();
+
+    for ( ; it != end; it ++) {
+      vec3 shadowray = (*it)->pos - i;
+      shadowray.normalize();
+      double colour = shadowray * normal;
+      if (colour <= 0.0) return Color(0,0,0);
+      return Color(colour, colour, colour);
+    }
+    return Color(0,0,0);
+  } 
 private:
-  //vec3 center;
   vec3 a;
   vec3 b;
   vec3 c;

@@ -1,7 +1,7 @@
 # Test Scene 1 
 # A simple quad viewed from different camera positions
 
-size 100 100 
+size 1000 1000 
 
 # Now specify the camera.  This is what you should implement.
 # This file has 4 camera positions.  Render your scene for all 4.
@@ -30,10 +30,10 @@ camera -4 -4 4 1 0 0 0 1 0 30
 
 maxverts 4 
 
-vertex -0.5 -0.5 0 
-vertex 0.5 -0.5 0
-vertex 0.5 0.5 0
-vertex -0.5 0.5 0
+vertex -2.0 -2.0 0 
+vertex 2.0 -2.0 0
+vertex 2.0 2.0 0
+vertex -2.0 2.0 0
 
 tri 0 1 2
 tri 0 2 3
