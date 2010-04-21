@@ -279,7 +279,7 @@ void Scene::parsefile (FILE *fp) {
 	  transformations.pop();
 	  transformations.push(m);
 	}
-	/*
+	
 	else if (!strcmp(command, "rotate")) {
 	  double ang, x,y,z ; // Rotate by an angle about axis x y z as in standard OpenGL
 
@@ -288,10 +288,12 @@ void Scene::parsefile (FILE *fp) {
 		fprintf(stderr, "rotate angle x y z\n") ;
 		exit(1) ;
 	  }
-	  glMatrixMode(GL_MODELVIEW) ;
-	  glRotatef(ang,x,y,z) ;
+	  vec3 r = vec3(x, y, z);
+	  mat4 m = transformations.top() * rotation3D(r, ang);
+	  transformations.pop();
+	  transformations.push(m);
 	}
-	*/
+	
 	else if (!strcmp(command, "scale")) {
 	  double x,y,z ; // Scale by x y z as in standard OpenGL
 
