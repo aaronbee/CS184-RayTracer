@@ -50,7 +50,7 @@ public:
     
     double distance = - ((r.getPos() - a) * normal) / ( r.getDir() * normal);
     //cout << distance;
-    if (distance > 0.0) { return false; }
+    if (distance < 0.0) { return false; }
     
     //the point where the ray intersects the plane is 
     vec3 p = r.getPos() + distance * r.getDir();
