@@ -291,7 +291,7 @@ void Scene::parsefile (FILE *fp) {
 	  glMatrixMode(GL_MODELVIEW) ;
 	  glRotatef(ang,x,y,z) ;
 	}
-
+	*/
 	else if (!strcmp(command, "scale")) {
 	  double x,y,z ; // Scale by x y z as in standard OpenGL
 
@@ -300,10 +300,12 @@ void Scene::parsefile (FILE *fp) {
 		fprintf(stderr, "scale x y z\n") ;
 		exit(1) ;
 	  }
-	  glMatrixMode(GL_MODELVIEW) ;
-	  glScalef(x,y,z) ;
+	  vec3 s = vec3(x, y, z);
+	  mat4 m = transformations.top() * scaling3D(s);
+	  transformations.pop();
+	  transformations.push(m);
 	}
-	*/
+
 	else if (!strcmp(command, "pushTransform")) {
 	  // Push the current matrix on the stack as in OpenGL
 	  transformations.push(transformations.top());
