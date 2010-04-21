@@ -29,6 +29,15 @@ public:
   Ray(const vec3 p, const vec3 d) : pos(p), dir(d) { }
   vec3 getPos() { return pos; }
   vec3 getDir() { return dir; }
+  Ray transform(const mat4 m) {
+	vec3 p, d;
+
+	// Last argument says to drop w
+	// if buggy try dealing with homogeneity thing.
+	p = vec3(m * vec4(pos, 1), 3);
+	d = vec3(m * vec4(dir, 0), 3);
+	return Ray(p, d);
+  }
 
 private:
   vec3 pos;
