@@ -81,6 +81,10 @@ void Scene::initialparse (FILE *fp) {
 
 void Scene::parsefile (FILE *fp) {
   char line[1000], command[1000] ; // Very bad to prefix array size :-)
+  vec3** vert;
+  int curvert = 0;
+  int maxverts;
+ 
   //  int sizeset = 0 ;
 
   //  initdefaults() ;
@@ -132,30 +136,33 @@ void Scene::parsefile (FILE *fp) {
 	  shapes->push_back(new Sphere(vec3(pos[0], pos[1], pos[2]), radius));
 
 	}
-	/*
+	
 	else if (!strcmp(command, "maxverts")) {
+    
 	  int num = sscanf(line, "%s %d", command, &maxverts) ;
 	  assert(num == 2) ; assert(maxverts > 0) ;
 	  assert(!strcmp(command,"maxverts")) ;
-	  assert(vert = new Vertex[maxverts]) ;
+	  assert(vert = new vec3 *[maxverts]) ;
 	}
-
+  /*
 	else if (!strcmp(command, "maxvertnorms")) {
 	  int num = sscanf(line, "%s %d", command, &maxvertnorms) ;
 	  assert(num == 2) ; assert(maxvertnorms > 0) ;
 	  assert(!strcmp(command,"maxvertnorms")) ;
 	  assert(vertnorm = new VertexNormal[maxvertnorms]) ;
 	}
-
+  */
+  
 	else if (!strcmp(command, "vertex")) {  // Add a vertex to the stack
 	  assert(maxverts) ; assert(curvert < maxverts) ;
-	  Vertex v ;
-	  int num = sscanf(line, "%s %lf %lf %lf", command, v.pos, v.pos+1, v.pos+2) ;
+    double x,y,z;
+	  int num = sscanf(line, "%s %lf %lf %lf", command, &x, &y, &z) ;
 	  assert(num == 4) ; assert(!strcmp(command,"vertex")) ;
-	  vert[curvert] = v ;
+	  vert[curvert] = new vec3(x,y,z) ;
 	  ++curvert ;
 	}
-
+  
+  /*
 	else if (!strcmp(command, "vertexnormal")) {  
 	  // Add a vertex to the stack with a normal
 	  assert(maxvertnorms) ; assert(curvertnorm < maxvertnorms) ;
@@ -169,8 +176,21 @@ void Scene::parsefile (FILE *fp) {
 	  vertnorm[curvertnorm] = vn ;
 	  ++curvertnorm ;
 	}
+	*/
+	
+	else if (!strcmp(command, "tri")) { // Triangle from 3 vertices
+	 int pts[3] ; 
+	 int num = sscanf(line, "%s %d %d %d", command, pts, pts+1, pts+2) ;
+	 assert(num == 4) ; assert(!strcmp(command,"tri")) ;
+	 int i ;
+	 for (i = 0 ; i < 3 ; i++) {
+	   assert(pts[i] >= 0 && pts[i] < maxverts) ;
+	 }
+	shapes->push_back(new Triangle(*vert[pts[0]], *vert[pts[1]], *vert[pts[2]]));
 
-        else if (!strcmp(command, "tri")) { // Triangle from 3 vertices
+  }
+  /*
+  else if (!strcmp(command, "tri")) { // Triangle from 3 vertices
 	 int pts[3] ; 
 	 int num = sscanf(line, "%s %d %d %d", command, pts, pts+1, pts+2) ;
 	 assert(num == 4) ; assert(!strcmp(command,"tri")) ;
@@ -210,7 +230,8 @@ void Scene::parsefile (FILE *fp) {
 	  glEnd() ;
 
        }
-
+  */
+  /*
         else if (!strcmp(command, "trinormal")) {
 	  int pts[3] ;
 	  int num = sscanf(line, "%s %d %d %d", command, pts, pts+1, pts+2) ;

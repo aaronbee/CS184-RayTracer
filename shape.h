@@ -39,17 +39,18 @@ private:
   
 class Triangle : public Shape {
 public:
-  Triangle(vec3 _center, vec3 _a, vec3 _b, vec3 _c) : center(_center), a(_a), b(_b), c(_c) { }
+  Triangle(vec3 _a, vec3 _b, vec3 _c) : a(_a), b(_b), c(_c) { }
 
   /* Check if the ray r intersects the triangle. 
    */
   bool intersect(Ray r) {
     //find the normal (this defines a plane)
     vec3 normal = (b - a) ^ (c - a);
+  
     
     double distance = - ((r.getPos() - a) * normal) / ( r.getDir() * normal);
-    
-    if (distance < 0.0) { return false; }
+    //cout << distance;
+    if (distance > 0.0) { return false; }
     
     //the point where the ray intersects the plane is 
     vec3 p = r.getPos() + distance * r.getDir();
@@ -64,7 +65,7 @@ public:
   }
   
 private:
-  vec3 center;
+  //vec3 center;
   vec3 a;
   vec3 b;
   vec3 c;
