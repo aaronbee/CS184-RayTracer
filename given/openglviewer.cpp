@@ -3,7 +3,7 @@
 #include <string.h>
 #include <assert.h>
 #include <math.h>
-#include <GL/glut.h>
+#include <glut/glut.h>
 
 int sizex, sizey ;
 
