@@ -50,7 +50,7 @@ public:
 
 private:
   vec3 u, v, w;
-  int fovx, fovy;
+  double fovx, fovy; // in radians
 };
 
 class Scene
