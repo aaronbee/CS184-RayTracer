@@ -139,7 +139,8 @@ void Scene::parsefile (FILE *fp) {
 		exit(1) ;
 	  }
 
-	  shapes->push_back(new Sphere(vec3(pos[0], pos[1], pos[2]), radius));
+	  shapes->push_back(new Sphere(vec3(pos[0], pos[1], pos[2]), radius,
+								   curDiffuse, curSpecular, curEmission, curShininess));
 
 	}
 	
@@ -192,7 +193,8 @@ void Scene::parsefile (FILE *fp) {
 	 for (i = 0 ; i < 3 ; i++) {
 	   assert(pts[i] >= 0 && pts[i] < maxverts) ;
 	 }
-	shapes->push_back(new Triangle(*vert[pts[0]], *vert[pts[1]], *vert[pts[2]]));
+	 shapes->push_back(new Triangle(*vert[pts[0]], *vert[pts[1]], *vert[pts[2]],
+									curDiffuse, curSpecular, curEmission, curShininess));
 
   }
   /*
