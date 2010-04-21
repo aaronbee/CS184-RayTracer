@@ -318,6 +318,7 @@ void Scene::parsefile (FILE *fp) {
     /********* MISCELLANEOUS IGNORED FOR OPENGL *******************/
 	
 	else if (!strcmp(command, "maxdepth")) {
+	  int maxdepth;
 	  int num = sscanf(line, "%s %d", command, &maxdepth) ;
 	  assert(num == 2) ;
 	  assert(!strcmp(command, "maxdepth")) ;
