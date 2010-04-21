@@ -71,6 +71,13 @@ protected:
   Color specular;
   Color emission;
   double shininess;
+  
+  void setMatProps(Color d, Color s, Color e, double sh) {
+	diffuse = d;
+	specular = s;
+	emission = e;
+	shininess = sh;
+  }
 };
 
 class Camera
