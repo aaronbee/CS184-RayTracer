@@ -1,7 +1,7 @@
 # Test Scene 1 
 # A simple quad viewed from different camera positions
 
-size 100 100 
+size 1000 600 
 
 # Now specify the camera.  This is what you should implement.
 # This file has 4 camera positions.  Render your scene for all 4.
@@ -27,4 +27,4 @@ camera -4 -4 4 1 0 0 0 1 0 30
 # Though it's probably simpler you just implement this, for later 
 # parts of the assignment.
 
-sphere 0 0 0 2
+sphere 0 0 0 .5

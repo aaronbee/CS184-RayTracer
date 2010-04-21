@@ -60,11 +60,15 @@ public:
   }
   Color hit(Ray r) {
     vec3 i = intersect(r);
-    if (i == NULL) return Color(0,0,0);
     
+    if (i == NULL) return Color(0,0,0);
+
+    
+    //center + normal = intersection
+    //normal = intersection - center
     vec3 normal = i - center;
     normal.normalize();
-    
+    //cout << normal << endl;
     //find a ray from the intersection point to every light
 
     light_itr it = scene->getLights()->begin();
@@ -72,13 +76,20 @@ public:
 
     for ( ; it != end; it ++) {
       //find a vector from i to the light position
-      vec3 shadowray = i - it.
-      //normalize it
-      //take the cosine of the dot product
+      //shadowray, lightpos, i
+      //intersection + shadowray = lightpos
+      //shadowray = lightpos - intersection
+      vec3 shadowray = (*it)->pos - i;
+      shadowray.normalize();
+      
+      double colour = shadowray * normal;
+      
+      return Color(colour, colour, colour);
+
     }
     
+    return Color(0,0,0);
     
-    return Color(1.0,1.0,1.0);
   }
   
 private:

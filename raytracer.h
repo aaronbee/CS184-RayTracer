@@ -83,8 +83,11 @@ private:
 class Light
 {
 public:
-  Light() { }
+  Light(vec3 p, Color c) : pos(p), color(c) { }
 
+
+  vec3 pos;
+  Color color;
 };
 
 class Scene

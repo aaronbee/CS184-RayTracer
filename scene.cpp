@@ -9,7 +9,7 @@ Scene::Scene(char* path)
   shapes = new vector<Shape *>();
   lights = new vector<Light *>();
   
-  lights->push_back(new PointLight(vec3(4,4,4), Color(0,0,0) ));
+  lights->push_back(new Light(vec3(-4,-4,4), Color(0,0,0) ));
   
   outputPath = string("test.png");
   readScene(path);

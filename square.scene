@@ -9,6 +9,7 @@ size 100 100
 #camera 0 0 4 0 0 0 0 1 0 30
 #camera 0 -3 3 0 0 0 0 1 0 30
 #camera -4 0 1 0 0 1 0 0 1 45
+#camera 0 0 4 0 0 -1 0 1 0 90
 camera -4 -4 4 1 0 0 0 1 0 30
 
 # lighting/material definitions
