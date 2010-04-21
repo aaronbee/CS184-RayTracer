@@ -5,10 +5,15 @@ typedef vector<Light *>::iterator light_itr;
 
 class Sphere : public Shape {
 public:
-  Sphere(vec3 c, double r) : center(c), radius(r) { }
-  
   /* return the intersection point of ray r with self,
    * or NULL if no intersection.
+   */
+  Sphere(vec3 c, double r, Color d, Color s, Color e, double sh) 
+	: center(c), radius(r) {
+	setMatProps(d, s, e, sh);
+  }
+
+  /* Check if the ray r intersects the sphere.
    */
   vec3 intersect(Ray r) {
     // break the ray into position and direction
@@ -83,7 +88,7 @@ public:
       shadowray.normalize();
       
       double colour = shadowray * normal;
-      
+      if (colour <= 0.0) return Color(0,0,0);
       return Color(colour, colour, colour);
 
     }
@@ -101,7 +106,10 @@ private:
   
 class Triangle : public Shape {
 public:
-  Triangle(vec3 _a, vec3 _b, vec3 _c) : a(_a), b(_b), c(_c) { }
+  Triangle(vec3 _a, vec3 _b, vec3 _c, Color d, Color s, Color e, double sh)
+	: a(_a), b(_b), c(_c) { 
+	setMatProps(d, s, e, sh);
+  }
 
   /* Check if the ray r intersects the triangle. 
    */

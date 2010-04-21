@@ -12,6 +12,8 @@ Scene::Scene(char* path)
   lights->push_back(new Light(vec3(-4,-4,4), Color(0,0,0) ));
   
   outputPath = string("test.png");
+  maxDepth = 5;
+  transformations.push(identity3D());
   readScene(path);
 }
 
@@ -90,7 +92,12 @@ void Scene::parsefile (FILE *fp) {
   vec3** vert;
   int curvert = 0;
   int maxverts;
- 
+
+  Color curDiffuse = Color(vec3(0, 0, 0));
+  Color curSpecular = Color(vec3(0, 0, 0));
+  Color curEmission = Color(vec3(0, 0, 0));
+  double curShininess = 0.0;
+
   //  int sizeset = 0 ;
 
   //  initdefaults() ;
@@ -139,7 +146,8 @@ void Scene::parsefile (FILE *fp) {
 		exit(1) ;
 	  }
 
-	  shapes->push_back(new Sphere(vec3(pos[0], pos[1], pos[2]), radius));
+	  shapes->push_back(new Sphere(vec3(pos[0], pos[1], pos[2]), radius,
+								   curDiffuse, curSpecular, curEmission, curShininess));
 
 	}
 	
@@ -192,7 +200,8 @@ void Scene::parsefile (FILE *fp) {
 	 for (i = 0 ; i < 3 ; i++) {
 	   assert(pts[i] >= 0 && pts[i] < maxverts) ;
 	 }
-	shapes->push_back(new Triangle(*vert[pts[0]], *vert[pts[1]], *vert[pts[2]]));
+	 shapes->push_back(new Triangle(*vert[pts[0]], *vert[pts[1]], *vert[pts[2]],
+									curDiffuse, curSpecular, curEmission, curShininess));
 
   }
   /*
@@ -261,7 +270,7 @@ void Scene::parsefile (FILE *fp) {
 
     /**************** TRANSFORMATIONS *********/
 
-	/*
+
 	else if (!strcmp(command, "translate")) {
 	  double x,y,z ; // Translate by x y z as in standard OpenGL
 
@@ -270,10 +279,12 @@ void Scene::parsefile (FILE *fp) {
 		fprintf(stderr, "translate x y z\n") ;
 		exit(1) ;
 	  }
-	  glMatrixMode(GL_MODELVIEW) ;
-	  glTranslatef(x,y,z) ;
+	  vec3 t = vec3(x, y, z);
+	  mat4 m = transformations.top() * translation3D(t);
+	  transformations.pop();
+	  transformations.push(m);
 	}
-
+	
 	else if (!strcmp(command, "rotate")) {
 	  double ang, x,y,z ; // Rotate by an angle about axis x y z as in standard OpenGL
 
@@ -282,10 +293,12 @@ void Scene::parsefile (FILE *fp) {
 		fprintf(stderr, "rotate angle x y z\n") ;
 		exit(1) ;
 	  }
-	  glMatrixMode(GL_MODELVIEW) ;
-	  glRotatef(ang,x,y,z) ;
+	  vec3 r = vec3(x, y, z);
+	  mat4 m = transformations.top() * rotation3D(r, ang);
+	  transformations.pop();
+	  transformations.push(m);
 	}
-
+	
 	else if (!strcmp(command, "scale")) {
 	  double x,y,z ; // Scale by x y z as in standard OpenGL
 
@@ -294,35 +307,40 @@ void Scene::parsefile (FILE *fp) {
 		fprintf(stderr, "scale x y z\n") ;
 		exit(1) ;
 	  }
-	  glMatrixMode(GL_MODELVIEW) ;
-	  glScalef(x,y,z) ;
+	  vec3 s = vec3(x, y, z);
+	  mat4 m = transformations.top() * scaling3D(s);
+	  transformations.pop();
+	  transformations.push(m);
 	}
 
 	else if (!strcmp(command, "pushTransform")) {
 	  // Push the current matrix on the stack as in OpenGL
-	  glMatrixMode(GL_MODELVIEW) ;
-	  glPushMatrix() ;
+	  transformations.push(transformations.top());
 	}
 
 	else if (!strcmp(command, "popTransform")) {
 	  // Pop the current matrix as in OpenGL
-	  glMatrixMode(GL_MODELVIEW) ;
-      glPopMatrix() ;
+	  if (transformations.size() == 1) {
+		cerr << "Cannot pop anymore." << endl;
+	  } else {
+		transformations.pop();
+	  }
 	}
-	*/
+
     /************************************************************/
 
     /********* MISCELLANEOUS IGNORED FOR OPENGL *******************/
-	/*
-        else if (!strcmp(command, "maxdepth")) {
+	
+	else if (!strcmp(command, "maxdepth")) {
+	  int maxdepth;
 	  int num = sscanf(line, "%s %d", command, &maxdepth) ;
 	  assert(num == 2) ;
 	  assert(!strcmp(command, "maxdepth")) ;
-	  fprintf(stderr, "Maxdepth set to %d but irrelevant for OpenGL\n", 
-		  maxdepth) ;
+	
+	  maxDepth = maxdepth;
 	}
-	*/
-       else if (!strcmp(command, "output")) {
+	
+	else if (!strcmp(command, "output")) {
 	   char out[300] ;
 	   int num = sscanf(line, "%s %s", command, out) ;
 	   assert(num == 2) ;
@@ -384,36 +402,39 @@ void Scene::parsefile (FILE *fp) {
     /*******************************************************/
 
     /****************** MATERIALS ************************/
-	/*
+
      else if (!strcmp(command, "diffuse")) {
        float diffuse[4] ; diffuse[3] = 1.0 ;
        int num = sscanf(line, "%s %f %f %f", command, diffuse, diffuse+1, diffuse+2) ;
        assert(num == 4) ; assert (!strcmp(command, "diffuse")) ;
-       glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse) ;
-       glColor3f(diffuse[0],diffuse[1],diffuse[2]) ;
+
+	   curDiffuse = Color(vec3(diffuse[0], diffuse[1], diffuse[2]));
      }
 
      else if (!strcmp(command, "specular")) {
        float specular[4] ; specular[3] = 1.0 ;
        int num = sscanf(line, "%s %f %f %f", command, specular, specular+1, specular+2) ;
        assert(num == 4) ; assert (!strcmp(command, "specular")) ;
-       glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular) ;
+      
+	   curSpecular = Color(vec3(specular[0], specular[1], specular[2]));
      }
 
      else if (!strcmp(command, "shininess")) {
        float shininess ;
        int num = sscanf(line, "%s %f", command, &shininess) ;
        assert(num == 2) ; assert (!strcmp(command, "shininess")) ;
-       glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, &shininess) ;
+
+	   curShininess = shininess;
      }
 
      else if (!strcmp(command, "emission")) {
        float emission[4] ; emission[3] = 1.0 ;
        int num = sscanf(line, "%s %f %f %f", command, emission, emission+1, emission+2) ;
        assert(num == 4) ; assert (!strcmp(command, "emission")) ;
-       glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emission) ;
+
+	   curEmission = Color(vec3(emission[0], emission[1], emission[2]));
      }
-	*/
+
     /*****************************************************/
 
     else {

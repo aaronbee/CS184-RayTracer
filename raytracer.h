@@ -9,6 +9,7 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <stack>
 
 class Ray;
 class Shape;
@@ -59,8 +60,28 @@ class Shape
 {
 public:
   Shape() { }
+
   virtual vec3 intersect(Ray r) { return false; }
   virtual Color hit(Ray r) { return Color(0,0,0); }
+
+  Color getDiffuse() { return diffuse; }
+  Color getSpecular() { return specular; }
+  Color getEmission() { return emission; }
+  double getShininess() { return shininess; }
+
+protected:
+  Color diffuse;
+  Color specular;
+  Color emission;
+  double shininess;
+  
+  void setMatProps(Color d, Color s, Color e, double sh) {
+	diffuse = d;
+	specular = s;
+	emission = e;
+	shininess = sh;
+  }
+
 };
 
 
@@ -103,7 +124,11 @@ public:
   vec3 getCameraLookAt() { return cameraLookAt; }
   bool getSample(vec2 *pixel);
   vector<Shape *>* getShapes() { return shapes; }
+
   vector<Light *>* getLights() { return lights; }
+
+  int getMaxDepth() { return maxDepth; }
+
   
 
   void init();
@@ -121,6 +146,8 @@ private:
   RayTracer *rt;
   Film *film;
   string outputPath;
+  int maxDepth;
+  stack<mat4> transformations;
 
   void initialparse(FILE *fp);
   void parsefile(FILE *fp);
