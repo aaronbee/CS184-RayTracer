@@ -7,6 +7,7 @@ Scene::Scene(char* path)
 {
   shapes = new vector<Shape *>();
   outputPath = string("test.png");
+  maxDepth = 5;
   readScene(path);
 }
 
@@ -315,16 +316,16 @@ void Scene::parsefile (FILE *fp) {
     /************************************************************/
 
     /********* MISCELLANEOUS IGNORED FOR OPENGL *******************/
-	/*
-        else if (!strcmp(command, "maxdepth")) {
+	
+	else if (!strcmp(command, "maxdepth")) {
 	  int num = sscanf(line, "%s %d", command, &maxdepth) ;
 	  assert(num == 2) ;
 	  assert(!strcmp(command, "maxdepth")) ;
-	  fprintf(stderr, "Maxdepth set to %d but irrelevant for OpenGL\n", 
-		  maxdepth) ;
+	
+	  maxDepth = maxdepth;
 	}
-	*/
-       else if (!strcmp(command, "output")) {
+	
+	else if (!strcmp(command, "output")) {
 	   char out[300] ;
 	   int num = sscanf(line, "%s %s", command, out) ;
 	   assert(num == 2) ;

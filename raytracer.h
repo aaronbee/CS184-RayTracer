@@ -105,6 +105,7 @@ public:
   vec3 getCameraLookAt() { return cameraLookAt; }
   bool getSample(vec2 *pixel);
   vector<Shape *>* getShapes() { return shapes; }
+  int getMaxDepth() { return maxDepth; }
 
   void init();
   void render();
@@ -119,6 +120,7 @@ private:
   RayTracer *rt;
   Film *film;
   string outputPath;
+  int maxDepth;
 
   void initialparse(FILE *fp);
   void parsefile(FILE *fp);
