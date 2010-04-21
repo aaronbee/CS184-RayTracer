@@ -6,6 +6,7 @@
 Scene::Scene(char* path)
 {
   shapes = new vector<Shape *>();
+  outputPath = string("test.png");
   readScene(path);
 }
 
@@ -54,7 +55,7 @@ void Scene::render()
 	c = rt->trace(r);
 	film->put(pixel, c);
   }
-  film->writeToFile("test.png");
+  film->writeToFile(outputPath);
 }
 
 
@@ -315,15 +316,17 @@ void Scene::parsefile (FILE *fp) {
 	  fprintf(stderr, "Maxdepth set to %d but irrelevant for OpenGL\n", 
 		  maxdepth) ;
 	}
-
+	*/
        else if (!strcmp(command, "output")) {
 	   char out[300] ;
 	   int num = sscanf(line, "%s %s", command, out) ;
 	   assert(num == 2) ;
 	   assert(!strcmp(command, "output")) ;
-	   fprintf(stderr, "Output image file set to: %s but ignored for OpenGL\n",out) ;
+
+	   outputPath = string(out);
+
        }
-	*/
+
     /*************************************************/
 
     /***************  LIGHTS *******************/
