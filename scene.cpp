@@ -301,19 +301,17 @@ void Scene::parsefile (FILE *fp) {
 	  glMatrixMode(GL_MODELVIEW) ;
 	  glScalef(x,y,z) ;
 	}
-
+	*/
 	else if (!strcmp(command, "pushTransform")) {
 	  // Push the current matrix on the stack as in OpenGL
-	  glMatrixMode(GL_MODELVIEW) ;
-	  glPushMatrix() ;
+	  transformations.push(transformations.top());
 	}
 
 	else if (!strcmp(command, "popTransform")) {
 	  // Pop the current matrix as in OpenGL
-	  glMatrixMode(GL_MODELVIEW) ;
-      glPopMatrix() ;
+	  transformations.pop();
 	}
-	*/
+
     /************************************************************/
 
     /********* MISCELLANEOUS IGNORED FOR OPENGL *******************/
