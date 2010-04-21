@@ -4,7 +4,7 @@
 
 Camera::Camera()
 {
-  w = scene->getCameraPos().normalize();
+  w = (scene->getCameraPos() - scene->getCameraLookAt()).normalize();
   u = w ^ scene->getCameraUp();
   u.normalize();
   v = w ^ u;

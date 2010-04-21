@@ -63,6 +63,7 @@ public:
   int getFov() { return fov; }
   vec3 getCameraPos() { return cameraPos; }
   vec3 getCameraUp() { return cameraUp; }
+  vec3 getCameraLookAt() { return cameraLookAt; }
   bool getSample(vec2 *pixel);
   vector<Shape *>* getShapes() { return shapes; }
 
