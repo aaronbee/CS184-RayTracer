@@ -85,7 +85,12 @@ void Scene::parsefile (FILE *fp) {
   vec3** vert;
   int curvert = 0;
   int maxverts;
- 
+
+  Color curDiffuse = Color(vec3(0, 0, 0));
+  Color curSpecular = Color(vec3(0, 0, 0));
+  Color curEmission = Color(vec3(0, 0, 0));
+  double curShininess = 0.0;
+
   //  int sizeset = 0 ;
 
   //  initdefaults() ;
@@ -379,36 +384,39 @@ void Scene::parsefile (FILE *fp) {
     /*******************************************************/
 
     /****************** MATERIALS ************************/
-	/*
+
      else if (!strcmp(command, "diffuse")) {
        float diffuse[4] ; diffuse[3] = 1.0 ;
        int num = sscanf(line, "%s %f %f %f", command, diffuse, diffuse+1, diffuse+2) ;
        assert(num == 4) ; assert (!strcmp(command, "diffuse")) ;
-       glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse) ;
-       glColor3f(diffuse[0],diffuse[1],diffuse[2]) ;
+
+	   curDiffuse = Color(vec3(diffuse[0], diffuse[1], diffuse[2]));
      }
 
      else if (!strcmp(command, "specular")) {
        float specular[4] ; specular[3] = 1.0 ;
        int num = sscanf(line, "%s %f %f %f", command, specular, specular+1, specular+2) ;
        assert(num == 4) ; assert (!strcmp(command, "specular")) ;
-       glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular) ;
+      
+	   curSpecular = Color(vec3(specular[0], specular[1], specular[2]));
      }
 
      else if (!strcmp(command, "shininess")) {
        float shininess ;
        int num = sscanf(line, "%s %f", command, &shininess) ;
        assert(num == 2) ; assert (!strcmp(command, "shininess")) ;
-       glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, &shininess) ;
+
+	   curShininess = shininess;
      }
 
      else if (!strcmp(command, "emission")) {
        float emission[4] ; emission[3] = 1.0 ;
        int num = sscanf(line, "%s %f %f %f", command, emission, emission+1, emission+2) ;
        assert(num == 4) ; assert (!strcmp(command, "emission")) ;
-       glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emission) ;
+
+	   curEmission = Color(vec3(emission[0], emission[1], emission[2]));
      }
-	*/
+
     /*****************************************************/
 
     else {
