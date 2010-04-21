@@ -10,7 +10,7 @@ camera.o : camera.cpp raytracer.h
 film.o : film.cpp raytracer.h
 	${CC} ${CFLAGS} -c film.cpp
 
-scene.o : scene.cpp raytracer.h
+scene.o : scene.cpp raytracer.h shape.h
 	${CC} ${CFLAGS} -c scene.cpp
 
 raytracer.o : raytracer.cpp raytracer.h
