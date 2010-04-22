@@ -113,10 +113,11 @@ private:
 class Light
 {
 public:
-  Light(vec3 p, Color c) : pos(p), color(c) { }
+  Light() { }
 
-
-  vec3 pos;
+  Color getColor() { return color; }
+  virtual Color incidentShade(vec3 i, vec3 n) { return Color(0,0,0); }
+protected:
   Color color;
 };
 
