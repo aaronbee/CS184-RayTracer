@@ -8,8 +8,8 @@ public:
   /* return the intersection point of ray r with self,
    * or NULL if no intersection.
    */
-  Sphere(vec3 c, double r, Color d, Color s, Color e, double sh) 
-	: center(c), radius(r) {
+  Sphere(vec3 c, double r, Color d, Color s, Color e, double sh, mat4 m) 
+	: center(c), radius(r), matrix(m) {
 	setMatProps(d, s, e, sh);
   }
 
@@ -73,6 +73,7 @@ public:
 private:
   vec3 center;
   double radius;
+  mat4 matrix;
 };
 
 

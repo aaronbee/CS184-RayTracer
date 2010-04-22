@@ -147,7 +147,8 @@ void Scene::parsefile (FILE *fp) {
 	  }
 
 	  shapes->push_back(new Sphere(vec3(pos[0], pos[1], pos[2]), radius,
-								   curDiffuse, curSpecular, curEmission, curShininess));
+								   curDiffuse, curSpecular, curEmission,
+								   curShininess, transformations.top()));
 
 	}
 	
