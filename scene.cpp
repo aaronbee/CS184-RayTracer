@@ -22,6 +22,7 @@ void Scene::init()
   rt = new RayTracer();
   film = new Film();
   ambient = Color(0.2, 0.2, 0.2);
+  setAttenuation(1.0, 0.0, 0.0);
 }
 
 void Scene::readScene(char* path)
@@ -377,13 +378,16 @@ void Scene::parsefile (FILE *fp) {
 	 lights->push_back(new PointLight(vec3(x,y,z), Color(r,g,b)));
 
        }
-/*
+
      else if (!strcmp(command, "attenuation")) {
-       int num = sscanf(line, "%s %lf %lf %lf", command, attenuation, attenuation + 1, attenuation +2) ;
+       double c, l, q;
+       int num = sscanf(line, "%s %lf %lf %lf", command, &c, &l, &q );
        assert(num == 4) ;
        assert(!strcmp(command, "attenuation")) ;
+       scene->setAttenuation(c,l,q);
+	
      }
-*/
+
      else if (!strcmp(command, "ambient")) {
        double r,g,b; 
        int num = sscanf(line, "%s %lf %lf %lf", command, &r,&g,&b) ;
