@@ -9,7 +9,6 @@ Scene::Scene(char* path)
   shapes = new vector<Shape *>();
   lights = new vector<Light *>();
   
-  lights->push_back(new DirectionalLight(vec3(4,4,1), Color(0,0,0) ));
   
   outputPath = string("test.png");
   maxDepth = 5;
@@ -361,38 +360,23 @@ void Scene::parsefile (FILE *fp) {
     /*************************************************/
 
     /***************  LIGHTS *******************/
-	/*
        else if (!strcmp(command, "directional")) {
-	 float direction[4], color[4] ; color[3] = 1.0 ; direction[3] = 0.0 ;
-	 int num = sscanf(line, "%s %f %f %f %f %f %f", command, direction, direction+1, direction+2, color, color+1, color+2) ;
+	 double x,y,z,r,g,b;
+	 int num = sscanf(line, "%s %lf %lf %lf %lf %lf %lf", command, &x, &y, &z, &r, &g, &b) ;
 	 assert(num == 7) ;
-	 assert(lightnum >= 0 && lightnum < GL_MAX_LIGHTS) ;
 
-	 int mylight = GL_LIGHT0 + lightnum ;
-	 glLightfv(mylight, GL_DIFFUSE, color) ;
-	 glLightfv(mylight, GL_SPECULAR, color) ;
-	 glLightfv(mylight, GL_POSITION, direction) ;
-	 glEnable(mylight) ;
-	 ++lightnum ;
+	 lights->push_back(new DirectionalLight(vec3(x,y,z), Color(r,g,b)));
+
        }
 
       else if (!strcmp(command, "point")) {
-	 float direction[4], color[4] ; color[3] = 1.0 ; direction[3] = 1.0 ;
-	 int num = sscanf(line, "%s %f %f %f %f %f %f", command, direction, direction+1, direction+2, color, color+1, color+2) ;
+	 double x,y,z,r,g,b;
+	 int num = sscanf(line, "%s %lf %lf %lf %lf %lf %lf", command, &x, &y, &z, &r, &g, &b) ;
 	 assert(num == 7) ;
-	 assert(lightnum >= 0 && lightnum < GL_MAX_LIGHTS) ;
+	 lights->push_back(new PointLight(vec3(x,y,z), Color(r,g,b)));
 
-	 int mylight = GL_LIGHT0 + lightnum ;
-	 glLightfv(mylight, GL_DIFFUSE, color) ;
-	 glLightfv(mylight, GL_SPECULAR, color) ;
-	 glLightfv(mylight, GL_POSITION, direction) ;
-	 glLightf(mylight, GL_CONSTANT_ATTENUATION, attenuation[0]) ;
-	 glLightf(mylight, GL_LINEAR_ATTENUATION, attenuation[1]) ;
-	 glLightf(mylight, GL_QUADRATIC_ATTENUATION, attenuation[2]) ;
-	 glEnable(mylight) ;
-	 ++lightnum ;	 
        }
-
+/*
      else if (!strcmp(command, "attenuation")) {
        int num = sscanf(line, "%s %lf %lf %lf", command, attenuation, attenuation + 1, attenuation +2) ;
        assert(num == 4) ;
