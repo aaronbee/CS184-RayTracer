@@ -140,6 +140,13 @@ public:
   int getMaxDepth() { return maxDepth; }
   Color getAmbient() { return ambient; }
   void setAmbient(Color c) { ambient = c; }
+  
+  void setAttenuation(double c,double l,double q) { attenuation[0] = c; attenuation[1] = l; attenuation[2] = q; }
+  
+  double getConstantAttenuation() { return attenuation[0]; }
+  double getLinearAttenuation() { return attenuation[1]; }
+  double getQuadraticAttenuation() { return attenuation[2]; } 
+  
 
   
 
@@ -154,6 +161,7 @@ private:
   vector<Shape *> *shapes;
   vector<Light *> *lights;
   Color ambient;
+  double attenuation[3];
   
   Camera *cam;
   RayTracer *rt;
