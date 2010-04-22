@@ -138,6 +138,8 @@ public:
   vector<Light *>* getLights() { return lights; }
 
   int getMaxDepth() { return maxDepth; }
+  Color getAmbient() { return ambient; }
+  void setAmbient(Color c) { ambient = c; }
 
   
 
@@ -151,6 +153,7 @@ private:
   int x, y;
   vector<Shape *> *shapes;
   vector<Light *> *lights;
+  Color ambient;
   
   Camera *cam;
   RayTracer *rt;

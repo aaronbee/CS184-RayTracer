@@ -21,6 +21,7 @@ void Scene::init()
   cam = new Camera();
   rt = new RayTracer();
   film = new Film();
+  ambient = Color(0.2, 0.2, 0.2);
 }
 
 void Scene::readScene(char* path)
@@ -382,15 +383,14 @@ void Scene::parsefile (FILE *fp) {
        assert(num == 4) ;
        assert(!strcmp(command, "attenuation")) ;
      }
-
+*/
      else if (!strcmp(command, "ambient")) {
-       float ambient[4] ; ambient[3] = 1.0 ;
-       int num = sscanf(line, "%s %f %f %f", command, ambient, ambient+1, ambient+2) ;
+       double r,g,b; 
+       int num = sscanf(line, "%s %lf %lf %lf", command, &r,&g,&b) ;
        assert(num == 4) ;
        assert(!strcmp(command, "ambient")) ;
-       glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambient) ; 
+       scene->setAmbient(Color(r,g,b));
      }
-	*/
     /*******************************************************/
 
     /****************** MATERIALS ************************/
