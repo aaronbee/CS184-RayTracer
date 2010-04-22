@@ -61,6 +61,37 @@ public:
 	return out.str();
   }
 
+  Color operator=(const Color &rhs) {
+    if (this == &rhs) {
+      return *this;
+    }
+    values = rhs.values;    
+    return *this;
+  }
+  //TODO: CEILING ON RGB
+  Color operator+=(const Color &rhs) {
+   values += rhs.values;
+   if (values[0] > 1.0) values[0] = 1.0;
+   if (values[1] > 1.0) values[1] = 1.0;
+   if (values[2] > 1.0) values[2] = 1.0;
+   return *this;
+  }
+  Color operator*=(double scale) {
+  values *= scale;
+  return *this;
+  }
+  Color operator+(const Color &other) const {
+    Color result = *this;
+    result += other;
+    return result;
+  }
+  Color operator*(double scale) const {
+    Color result = *this;
+    result *= scale;
+    return result;
+  }
+
+
 private:
   vec3 values;
 };

@@ -60,11 +60,13 @@ public:
     light_itr it = scene->getLights()->begin();
     light_itr end = scene->getLights()->end();
 
+    Color result = scene->getAmbient();
+
     for ( ; it != end; it ++) {
       //pass the light an intersection point and calculate incident shading
-      return (*it)->incidentShade(i, normal);
+      result += (*it)->incidentShade(i, normal);
     }
-    return Color(0,0,0);
+    return result; 
   }
   
 private:
@@ -112,10 +114,12 @@ public:
     light_itr it = scene->getLights()->begin();
     light_itr end = scene->getLights()->end();
 
+    Color result = scene->getAmbient();
+
     for ( ; it != end; it ++) {
-      return (*it)->incidentShade(i, normal);
+      result += (*it)->incidentShade(i, normal);
     }
-    return Color(0,0,0);
+    return result;
   } 
 private:
   vec3 a;
