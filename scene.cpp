@@ -4,6 +4,12 @@
 #include "light.h"
 #include <stdio.h>
 
+typedef struct 
+{
+  vec3* vert;
+  vec3* norm;
+} vertnorm;
+
 Scene::Scene(char* path)
 {
   shapes = new vector<Shape *>();
@@ -90,9 +96,13 @@ void Scene::initialparse (FILE *fp) {
 
 void Scene::parsefile (FILE *fp) {
   char line[1000], command[1000] ; // Very bad to prefix array size :-)
-  vec3** vert;
+  vec3** verts;
   int curvert = 0;
   int maxverts;
+
+  vertnorm* vertnorms;
+  int curvertnorm = 0;
+  int maxvertnorms;
 
   Color curDiffuse = Color(vec3(0, 0, 0));
   Color curSpecular = Color(vec3(0, 0, 0));
@@ -153,45 +163,46 @@ void Scene::parsefile (FILE *fp) {
 	}
 	
 	else if (!strcmp(command, "maxverts")) {
-    
 	  int num = sscanf(line, "%s %d", command, &maxverts) ;
 	  assert(num == 2) ; assert(maxverts > 0) ;
 	  assert(!strcmp(command,"maxverts")) ;
-	  assert(vert = new vec3 *[maxverts]) ;
+	  assert(verts = new vec3 *[maxverts]) ;
 	}
-  /*
+  
 	else if (!strcmp(command, "maxvertnorms")) {
 	  int num = sscanf(line, "%s %d", command, &maxvertnorms) ;
 	  assert(num == 2) ; assert(maxvertnorms > 0) ;
 	  assert(!strcmp(command,"maxvertnorms")) ;
-	  assert(vertnorm = new VertexNormal[maxvertnorms]) ;
+	  assert(vertnorms = new vertnorm [maxvertnorms]) ;
 	}
-  */
+  
   
 	else if (!strcmp(command, "vertex")) {  // Add a vertex to the stack
 	  assert(maxverts) ; assert(curvert < maxverts) ;
     double x,y,z;
 	  int num = sscanf(line, "%s %lf %lf %lf", command, &x, &y, &z) ;
 	  assert(num == 4) ; assert(!strcmp(command,"vertex")) ;
-	  vert[curvert] = new vec3(x,y,z) ;
+	  verts[curvert] = new vec3(x,y,z) ;
 	  ++curvert ;
 	}
   
-  /*
+  
 	else if (!strcmp(command, "vertexnormal")) {  
 	  // Add a vertex to the stack with a normal
 	  assert(maxvertnorms) ; assert(curvertnorm < maxvertnorms) ;
-	  VertexNormal vn ;
+	  vertnorm vn ;
+          double x,y,z,nx,ny,nz;
 
 	  int num = sscanf(line, "%s %lf %lf %lf %lf %lf %lf", 
-		  command, vn.pos, vn.pos+1, vn.pos+2, 
-		  vn.normal, vn.normal+1, vn.normal+2) ;
+		  command, &x, &y, &z, &nx, &ny, &nz); 
 
 	  assert(num == 7) ; assert(!strcmp(command,"vertexnormal")) ;
-	  vertnorm[curvertnorm] = vn ;
+          vn.vert = new vec3(x,y,z);
+          vn.norm = new vec3(nx,ny,nz);
+	  vertnorms[curvertnorm] = vn ;
 	  ++curvertnorm ;
 	}
-	*/
+	
 	
 	else if (!strcmp(command, "tri")) { // Triangle from 3 vertices
 	 int pts[3] ; 
@@ -202,9 +213,9 @@ void Scene::parsefile (FILE *fp) {
 	   assert(pts[i] >= 0 && pts[i] < maxverts) ;
 	 }
 	 vec4 temp0, temp1, temp2;
-	 temp0 = vec4(*vert[pts[0]]);
-	 temp1 = vec4(*vert[pts[1]]);
-	 temp2 = vec4(*vert[pts[2]]);
+	 temp0 = vec4(*verts[pts[0]]);
+	 temp1 = vec4(*verts[pts[1]]);
+	 temp2 = vec4(*verts[pts[2]]);
 	 vec3 vert0 = vec3(transformations.top() * temp0);
 	 vec3 vert1 = vec3(transformations.top() * temp1);
 	 vec3 vert2 = vec3(transformations.top() * temp2);
@@ -213,48 +224,6 @@ void Scene::parsefile (FILE *fp) {
 									curSpecular, curEmission, curShininess));
 
   }
-  /*
-  else if (!strcmp(command, "tri")) { // Triangle from 3 vertices
-	 int pts[3] ; 
-	 int num = sscanf(line, "%s %d %d %d", command, pts, pts+1, pts+2) ;
-	 assert(num == 4) ; assert(!strcmp(command,"tri")) ;
-	 int i,j ;
-	 for (i = 0 ; i < 3 ; i++) {
-	   assert(pts[i] >= 0 && pts[i] < maxverts) ;
-	 }
-	  double vertex[3][3] ;
-	  double normal[3] ;
-	  for (i = 0 ; i < 3 ; i++) 
-	    for (j = 0 ; j < 3 ; j++)
-	      vertex[i][j] = vert[pts[i]].pos[j] ;
-	  
-	  
-	  // Calculate the face normal 
-	  double vec1[3], vec2[3], vec3[3] ;
-	  for (i = 0 ; i < 3 ; i++) {
-		  vec1[i] = vertex[1][i] - vertex[0][i] ;
-		  vec2[i] = vertex[2][i] - vertex[0][i] ;
-	  }
-	  vec3[0] = vec1[1]*vec2[2] - vec1[2]*vec2[1] ;
-	  vec3[1] = vec1[2]*vec2[0] - vec1[0]*vec2[2] ;
-	  vec3[2] = vec1[0]*vec2[1] - vec1[1]*vec2[0] ;
-
-	  double norm = 0 ;
-	  for (i = 0 ; i < 3 ; i++) norm += vec3[i] * vec3[i] ;
-	  norm = sqrt(norm) ;
-      if (norm == 0) {normal[0] = 0 ; normal[1] = 0 ; normal[2] = 1.0 ; }
-	  else {
-		for (i = 0 ; i < 3 ; i++) normal[i] = vec3[i] / norm ;
-	  }
-	
-	  glBegin(GL_TRIANGLES) ;
-		glNormal3f(normal[0],normal[1],normal[2]) ;
-		for (i = 0 ; i < 3 ; i++)
-			glVertex3f(vertex[i][0],vertex[i][1],vertex[i][2]) ;
-	  glEnd() ;
-
-       }
-  */
   /*
         else if (!strcmp(command, "trinormal")) {
 	  int pts[3] ;
