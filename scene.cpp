@@ -15,7 +15,6 @@ Scene::Scene(char* path)
   shapes = new vector<Shape *>();
   lights = new vector<Light *>();
   
-  
   outputPath = string("test.png");
   maxDepth = 5;
   transformations.push(identity3D());

@@ -46,8 +46,7 @@ public:
     else { return NULL; }
     
     //assert(dist > 0.0);
-	vec3 i = transformed.getPos() + dist * transformed.getDir();
-    return matrix * i;
+    return transformed.getPos() + dist * transformed.getDir();
   }
 
   /* method hit returns the color of object this seen by ray r
@@ -59,14 +58,17 @@ public:
   Color hit(Ray r) {
     vec3 i = intersect(r);
     if (i == NULL) return Color(0,0,0);
-    vec3 normal = (inverse * (i - center)).normalize();
+	vec3 mi = vec3(matrix * vec4(i));
+    vec3 normal = (i - center).normalize();
+	normal = vec3(inverse * (vec4(normal, 0)), 3);
+  normal.normalize();
 
     light_itr it = scene->getLights()->begin();
     light_itr end = scene->getLights()->end();
 
     for ( ; it != end; it ++) {
       //pass the light an intersection point and calculate incident shading
-      return (*it)->incidentShade(i, normal);
+      return (*it)->incidentShade(mi, normal);
     }
     return Color(0,0,0);
   }
