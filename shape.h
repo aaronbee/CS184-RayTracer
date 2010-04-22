@@ -65,11 +65,8 @@ public:
     light_itr end = scene->getLights()->end();
 
     for ( ; it != end; it ++) {
-      vec3 shadowray = (*it)->pos - i;
-      shadowray.normalize();
-      double colour = shadowray * normal;
-      if (colour <= 0.0) return Color(0,0,0);
-      return Color(colour, colour, colour);
+      //pass the light an intersection point and calculate incident shading
+      return (*it)->incidentShade(i, normal);
     }
     return Color(0,0,0);
   }
@@ -122,11 +119,7 @@ public:
     light_itr end = scene->getLights()->end();
 
     for ( ; it != end; it ++) {
-      vec3 shadowray = (*it)->pos - i;
-      shadowray.normalize();
-      double colour = shadowray * normal;
-      if (colour <= 0.0) return Color(0,0,0);
-      return Color(colour, colour, colour);
+      return (*it)->incidentShade(i, normal);
     }
     return Color(0,0,0);
   } 

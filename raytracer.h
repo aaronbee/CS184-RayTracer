@@ -113,10 +113,11 @@ private:
 class Light
 {
 public:
-  Light(vec3 p, Color c) : pos(p), color(c) { }
+  Light() { }
 
-
-  vec3 pos;
+  Color getColor() { return color; }
+  virtual Color incidentShade(vec3 i, vec3 n) { return Color(0,0,0); }
+protected:
   Color color;
 };
 
@@ -137,6 +138,15 @@ public:
   vector<Light *>* getLights() { return lights; }
 
   int getMaxDepth() { return maxDepth; }
+  Color getAmbient() { return ambient; }
+  void setAmbient(Color c) { ambient = c; }
+  
+  void setAttenuation(double c,double l,double q) { attenuation[0] = c; attenuation[1] = l; attenuation[2] = q; }
+  
+  double getConstantAttenuation() { return attenuation[0]; }
+  double getLinearAttenuation() { return attenuation[1]; }
+  double getQuadraticAttenuation() { return attenuation[2]; } 
+  
 
   
 
@@ -150,6 +160,8 @@ private:
   int x, y;
   vector<Shape *> *shapes;
   vector<Light *> *lights;
+  Color ambient;
+  double attenuation[3];
   
   Camera *cam;
   RayTracer *rt;
