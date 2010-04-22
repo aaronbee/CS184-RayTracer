@@ -8,8 +8,9 @@ public:
   /* return the intersection point of ray r with self,
    * or NULL if no intersection.
    */
-  Sphere(vec3 c, double r, Color d, Color s, Color e, double sh) 
-	: center(c), radius(r) {
+  Sphere(vec3 c, double r, Color d, Color s, Color e, double sh, mat4 m) 
+	: center(c), radius(r), matrix(m) {
+	inverse = m.inverse();
 	setMatProps(d, s, e, sh);
   }
 
@@ -21,10 +22,12 @@ public:
     
     // a sphere is parametrically defined by radius and position
     // (point - Center) * (point - center ) - radius ^2 = 0
+
+	Ray transformed = r.transform(inverse);
     
-    double b = 2 * r.getDir() * (r.getPos() - center);
-    double c = (r.getPos() - center) * (r.getPos() -center ) - pow(radius,2.0);
-    double a = r.getDir() * r.getDir();
+    double b = 2 * transformed.getDir() * (transformed.getPos() - center);
+    double c = (transformed.getPos() - center) * (transformed.getPos() -center ) - pow(radius,2.0);
+    double a = transformed.getDir() * transformed.getDir();
     double discrim = pow(b,2.0) - 4 * a * c;
     
     if (discrim < 0.0) { return NULL; }
@@ -43,7 +46,7 @@ public:
     else { return NULL; }
     
     //assert(dist > 0.0);
-    return r.getPos() + dist * r.getDir();
+    return transformed.getPos() + dist * transformed.getDir();
   }
 
   /* method hit returns the color of object this seen by ray r
@@ -55,7 +58,10 @@ public:
   Color hit(Ray r) {
     vec3 i = intersect(r);
     if (i == NULL) return Color(0,0,0);
+	vec3 mi = vec3(matrix * vec4(i));
     vec3 normal = (i - center).normalize();
+	normal = vec3(inverse * (vec4(normal, 0)), 3);
+  normal.normalize();
 
     light_itr it = scene->getLights()->begin();
     light_itr end = scene->getLights()->end();
@@ -64,7 +70,7 @@ public:
 
     for ( ; it != end; it ++) {
       //pass the light an intersection point and calculate incident shading
-      result += (*it)->incidentShade(i, normal);
+      result += (*it)->incidentShade(mi, normal);
     }
     return result; 
   }
@@ -72,6 +78,8 @@ public:
 private:
   vec3 center;
   double radius;
+  mat4 matrix;
+  mat4 inverse;
 };
 
 

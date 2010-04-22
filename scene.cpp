@@ -15,7 +15,6 @@ Scene::Scene(char* path)
   shapes = new vector<Shape *>();
   lights = new vector<Light *>();
   
-  
   outputPath = string("test.png");
   maxDepth = 5;
   transformations.push(identity3D());
@@ -158,7 +157,8 @@ void Scene::parsefile (FILE *fp) {
 	  }
 
 	  shapes->push_back(new Sphere(vec3(pos[0], pos[1], pos[2]), radius,
-								   curDiffuse, curSpecular, curEmission, curShininess));
+								   curDiffuse, curSpecular, curEmission,
+								   curShininess, transformations.top()));
 
 	}
 	

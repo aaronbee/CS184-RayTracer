@@ -34,8 +34,8 @@ public:
 
 	// Last argument says to drop w
 	// if buggy try dealing with homogeneity thing.
-	p = vec3(m * vec4(pos, 1), 3);
-	d = vec3(m * vec4(dir, 0), 3);
+	p = vec3(m * vec4(pos, 1));
+	d = vec3(m * vec4(dir, 0), 3).normalize();
 	return Ray(p, d);
   }
 
