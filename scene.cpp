@@ -393,7 +393,7 @@ void Scene::parsefile (FILE *fp) {
        int num = sscanf(line, "%s %lf %lf %lf", command, &r,&g,&b) ;
        assert(num == 4) ;
        assert(!strcmp(command, "ambient")) ;
-       scene->setAmbient(Color(r,g,b));
+       ambient = Color(r,g,b);
      }
     /*******************************************************/
 

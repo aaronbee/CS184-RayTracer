@@ -5,21 +5,31 @@ typedef vector<Shape *>::iterator shape_itr;
 
 Color RayTracer::trace(Ray r)
 {
-  Color red = Color(1.0, 0, 0);
   Color black = Color(0, 0, 0);
 
   shape_itr it = scene->getShapes()->begin();
   shape_itr end = scene->getShapes()->end();
 
+  vec3 pos;
+  double dist;
+  double closestDist = -1;
+  vec3 closestPos;
+  Shape *closestShape = NULL;
+
   for ( ; it != end; it ++) {
-	//if ((*it)->intersect(r) != NULL) {
-	//	return red;
-	//  }
-    if ((*it)->intersect(r) != NULL) {
-      return (*it)->hit(r);
-    }
-    
-    
+	pos = (*it)->intersect(r);
+	if (pos != NULL) {
+	  dist = (scene->getCameraPos() - pos).length();
+	  if (closestDist < 0 || dist < closestDist) {
+		closestDist = dist;
+		closestPos = pos;
+		closestShape = *it;
+	  }
+	}
+  }
+  
+  if (closestShape != NULL) {
+	return closestShape->hit(closestPos);
   }
   
   return black;

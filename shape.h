@@ -56,8 +56,7 @@ public:
    * sphereCenter + normalVector = intersectionPoint
    * intersectionPoint + shadowRay = lightPos
    */  
-  Color hit(Ray r) {
-    vec3 i = intersect(r);
+  Color hit(vec3 i) {
     if (i == NULL) return Color(0,0,0);
 	vec3 normal = (vec3(inverse * i) - center);
 	normal = vec3(inverse * (vec4(normal, 0)), 3);
@@ -114,8 +113,7 @@ public:
     return NULL;
   }
   
-   Color hit(Ray r) {
-    vec3 i = intersect(r);
+   Color hit(vec3 i) {
     if (i == NULL) return Color(0,0,0);
     vec3 normal = ((b-a) ^ (c-a)).normalize();
 

@@ -102,7 +102,7 @@ public:
   Shape() { }
 
   virtual vec3 intersect(Ray r) { return false; }
-  virtual Color hit(Ray r) { return Color(0,0,0); }
+  virtual Color hit(vec3 pos) { return Color(0,0,0); }
 
   Color getDiffuse() { return diffuse; }
   Color getSpecular() { return specular; }
