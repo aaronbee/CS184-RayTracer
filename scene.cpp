@@ -19,6 +19,7 @@ Scene::Scene(char* path)
   maxDepth = 5;
   transformations.push(identity3D());
   readScene(path);
+  totalPix = width * height;
 }
 
 void Scene::init()
@@ -58,16 +59,46 @@ bool Scene::getSample(vec2 *pixel)
   return true;
 }
 
+void Scene::printProgressHeader() {
+  int i = 0;
+  cout << "0%";
+  i += 2;
+  for (; i < 24; i ++) {
+	cout << " ";
+  }
+  cout << "50%";
+  i += 3;
+  for (; i < 46; i++) {
+    cout << " ";
+  }
+  cout << "100%" << endl;
+}
+
+void Scene::printProgress(int count) {
+  static int printed = 0;
+  int shouldPrint = 50.0 * ((double) count / (double) totalPix);
+  for (; printed < shouldPrint; printed ++) {
+	cout << "X" << flush;
+  }
+}
+
 void Scene::render()
 {
   vec2 pixel;
   Ray r;
   Color c;
+  printProgressHeader();
+  int count = 0;
+
   while (getSample(&pixel)) {
 	r = cam->generateRay(pixel);
 	c = rt->trace(r);
 	film->put(pixel, c);
+	count++;
+	printProgress(count);
   }
+  
+  cout << endl;
   film->writeToFile(outputPath);
 }
 

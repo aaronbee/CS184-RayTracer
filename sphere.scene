@@ -1,7 +1,7 @@
 # Test Scene 1 
 # A simple quad viewed from different camera positions
 
-size 400 400 
+size 1440 900
 
 # Now specify the camera.  This is what you should implement.
 # This file has 4 camera positions.  Render your scene for all 4.
@@ -36,4 +36,4 @@ scale 2 .5 .5
 sphere 0 0 1 1
 popTransform
 
-#sphere -1 .5 0 .4
+sphere -1 .5 0 .4

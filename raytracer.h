@@ -178,9 +178,7 @@ public:
   double getLinearAttenuation() { return attenuation[1]; }
   double getQuadraticAttenuation() { return attenuation[2]; } 
   
-
   
-
   void init();
   void render();
 
@@ -189,6 +187,7 @@ private:
   int fov;
   vec3 cameraPos, cameraUp, cameraLookAt;
   int x, y;
+  int totalPix;
   vector<Shape *> *shapes;
   vector<Light *> *lights;
   Color ambient;
@@ -203,6 +202,8 @@ private:
 
   void initialparse(FILE *fp);
   void parsefile(FILE *fp);
+  void printProgressHeader();
+  void printProgress(int count);
 };
 
 
