@@ -11,10 +11,19 @@ Color Shape::hit(vec3 intersect) {
   light_itr it = scene->getLights()->begin();
   light_itr end = scene->getLights()->end();
 
-  Color result = scene->getAmbient();
+  Color result = scene->getAmbient() + emission;
 
   for ( ; it != end; it ++) {
-	result += (*it)->incidentShade(intersect, normal);
+	Color contrib = Color(0, 0, 0);
+	if (!(*it)->blocked(intersect)) {
+	  
+	  contrib += diffuse * (*it)->incidentShade(intersect, normal);
+
+	  contrib += specular * ((normal * halfAngle) ** shininess);
+
+	  contrib *= (*it)->getColor();
+	}
+	result += contrib;
   }
   return result;
 }

@@ -9,12 +9,12 @@ public:
   
   vec3 getPos() { return pos; }
 
-  Color incidentShade(vec3 i, vec3 normal) {
+  double incidentShade(vec3 i, vec3 normal) {
     vec3 shadowray = pos - i;
     shadowray.normalize();
     double colour = shadowray * normal;
     if (colour <= 0.0) return Color(0,0,0);
-    return Color(colour, colour, colour);
+    return colour;
   }
 
 private:  
@@ -30,12 +30,12 @@ public:
 
   vec3 getDir() { return dir; }
 
-  Color incidentShade(vec3 i, vec3 normal) {
+  double incidentShade(vec3 i, vec3 normal) {
     vec3 shadowray = dir;
     shadowray.normalize();
     double colour = shadowray * normal;
     if (colour <= 0.0) return Color(0,0,0);
-    return Color(colour, colour, colour);
+    return colour;
   }
 
 

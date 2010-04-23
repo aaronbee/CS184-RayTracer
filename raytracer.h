@@ -149,7 +149,7 @@ public:
   Light() { }
 
   Color getColor() { return color; }
-  virtual Color incidentShade(vec3 i, vec3 n) { return Color(0,0,0); }
+  virtual double incidentShade(vec3 i, vec3 n) { return Color(0,0,0); }
 protected:
   Color color;
 };
