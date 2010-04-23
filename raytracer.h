@@ -102,7 +102,7 @@ public:
   Shape() { }
 
   virtual vec3 intersect(Ray r) { return false; }
-  virtual Color hit(vec3 pos) { return Color(0,0,0); }
+  Color hit(vec3 intersect);
 
   Color getDiffuse() { return diffuse; }
   Color getSpecular() { return specular; }
@@ -115,6 +115,8 @@ protected:
   Color emission;
   double shininess;
   
+  virtual vec3 calculateNormal(vec3 i);
+
   void setMatProps(Color d, Color s, Color e, double sh) {
 	diffuse = d;
 	specular = s;

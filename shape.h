@@ -1,7 +1,6 @@
 #include <math.h>
 #include "raytracer.h"
 
-typedef vector<Light *>::iterator light_itr;
 
 class Sphere : public Shape {
 public:
@@ -50,29 +49,19 @@ public:
     return vec3(matrix * vec4(i));
   }
 
+  vec3 calculateNormal(vec3 i) {
+	vec3 normal = (vec3(inverse * i) - center);
+	normal = vec3(inverse * (vec4(normal, 0)), 3);
+	normal.normalize();
+	return normal;
+  }
+
   /* method hit returns the color of object this seen by ray r
    * preconditions: none
    * Directions:
    * sphereCenter + normalVector = intersectionPoint
    * intersectionPoint + shadowRay = lightPos
    */  
-  Color hit(vec3 i) {
-    if (i == NULL) return Color(0,0,0);
-	vec3 normal = (vec3(inverse * i) - center);
-	normal = vec3(inverse * (vec4(normal, 0)), 3);
-	normal.normalize();
-
-    light_itr it = scene->getLights()->begin();
-    light_itr end = scene->getLights()->end();
-
-    Color result = scene->getAmbient();
-
-    for ( ; it != end; it ++) {
-      //pass the light an intersection point and calculate incident shading
-      result += (*it)->incidentShade(i, normal);
-    }
-    return result; 
-  }
   
 private:
   vec3 center;
@@ -81,8 +70,6 @@ private:
   mat4 inverse;
 };
 
-
-  
 class Triangle : public Shape {
 public:
   Triangle(vec3 _a, vec3 _b, vec3 _c, Color d, Color s, Color e, double sh)
@@ -112,21 +99,12 @@ public:
     }
     return NULL;
   }
+
+  vec3 calculateNormal(vec3 i) {
+	return ((b-a) ^ (c-a)).normalize();
+  }
   
-   Color hit(vec3 i) {
-    if (i == NULL) return Color(0,0,0);
-    vec3 normal = ((b-a) ^ (c-a)).normalize();
 
-    light_itr it = scene->getLights()->begin();
-    light_itr end = scene->getLights()->end();
-
-    Color result = scene->getAmbient();
-
-    for ( ; it != end; it ++) {
-      result += (*it)->incidentShade(i, normal);
-    }
-    return result;
-  } 
 private:
   vec3 a;
   vec3 b;
