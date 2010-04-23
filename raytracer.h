@@ -115,7 +115,7 @@ protected:
   Color emission;
   double shininess;
   
-  virtual vec3 calculateNormal(vec3 i);
+  virtual vec3 calculateNormal(vec3 i) { return vec3(0, 0, 0); }
 
   void setMatProps(Color d, Color s, Color e, double sh) {
 	diffuse = d;
