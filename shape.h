@@ -11,7 +11,6 @@ public:
   Sphere(vec3 c, double r, Color d, Color s, Color e, double sh, mat4 m) 
 	: center(c), radius(r), matrix(m) {
 	inverse = m.inverse();
-	centerT = vec3(m * vec4(c));
 	setMatProps(d, s, e, sh);
   }
 
@@ -47,7 +46,8 @@ public:
     else { return NULL; }
     
     //assert(dist > 0.0);
-    return transformed.getPos() + dist * transformed.getDir();
+	vec3 i = transformed.getPos() + dist * transformed.getDir();
+    return vec3(matrix * vec4(i));
   }
 
   /* method hit returns the color of object this seen by ray r
@@ -59,11 +59,9 @@ public:
   Color hit(Ray r) {
     vec3 i = intersect(r);
     if (i == NULL) return Color(0,0,0);
-	vec3 mi = vec3(matrix * vec4(i));
-	//vec3 normal = (mi - centerT).normalize();
-	vec3 normal = (vec3(inverse * mi) - center);
+	vec3 normal = (vec3(inverse * i) - center);
 	normal = vec3(inverse * (vec4(normal, 0)), 3);
-  normal.normalize();
+	normal.normalize();
 
     light_itr it = scene->getLights()->begin();
     light_itr end = scene->getLights()->end();
@@ -72,7 +70,7 @@ public:
 
     for ( ; it != end; it ++) {
       //pass the light an intersection point and calculate incident shading
-      result += (*it)->incidentShade(mi, normal);
+      result += (*it)->incidentShade(i, normal);
     }
     return result; 
   }
@@ -82,7 +80,6 @@ private:
   double radius;
   mat4 matrix;
   mat4 inverse;
-  vec3 centerT;
 };
 
 
