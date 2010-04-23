@@ -11,6 +11,7 @@ public:
   Sphere(vec3 c, double r, Color d, Color s, Color e, double sh, mat4 m) 
 	: center(c), radius(r), matrix(m) {
 	inverse = m.inverse();
+	centerT = vec3(m * vec4(c));
 	setMatProps(d, s, e, sh);
   }
 
@@ -59,7 +60,8 @@ public:
     vec3 i = intersect(r);
     if (i == NULL) return Color(0,0,0);
 	vec3 mi = vec3(matrix * vec4(i));
-    vec3 normal = (i - center).normalize();
+	//vec3 normal = (mi - centerT).normalize();
+	vec3 normal = (vec3(inverse * mi) - center);
 	normal = vec3(inverse * (vec4(normal, 0)), 3);
   normal.normalize();
 
@@ -80,6 +82,7 @@ private:
   double radius;
   mat4 matrix;
   mat4 inverse;
+  vec3 centerT;
 };
 
 
