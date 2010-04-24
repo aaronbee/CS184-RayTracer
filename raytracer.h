@@ -116,6 +116,7 @@ protected:
   double shininess;
   
   virtual vec3 calculateNormal(vec3 i) { return vec3(0, 0, 0); }
+  vec3 halfAngle(const vec3 one, const vec3 two)
 
   void setMatProps(Color d, Color s, Color e, double sh) {
 	diffuse = d;
