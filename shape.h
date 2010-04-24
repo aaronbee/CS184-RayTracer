@@ -28,14 +28,12 @@ Color Shape::hit(vec3 intersect) {
   return result;
 }
 
+/**
+ * Returns the normal vector between the two given.
+ * Precondition: one and two are normal.
+ */
 vec3 Shape::halfAngle(const vec3 one, const vec3 two) {
-  vec3 rotVec = one ^ two;
-  double rotAngle = acos((one * two) / (one.length() * two.length()));
-  rotAngle *= (180.0 / M_PI);
-  rotAngle /= 2;
-  mat4 rotMatrix = rotation3D(rotVec, rotAngle);
-  // Possibly need to rotate other way.
-  return vec3(rotMatrix * vec4(one, 0), 3);
+  return (one + two).normalize();
 }
 
 class Sphere : public Shape {
