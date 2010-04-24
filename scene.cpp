@@ -254,20 +254,23 @@ void Scene::parsefile (FILE *fp) {
 	  int pts[3] ;
 	  int num = sscanf(line, "%s %d %d %d", command, pts, pts+1, pts+2) ;
 	  assert(num == 4) ; assert(!strcmp(command,"trinormal")) ;
-	  int i,j ;
+	  int i;
 	  for (i = 0 ; i < 3 ; i++) {
 	    assert(pts[i] >= 0 && pts[i] < maxvertnorms) ;
 	  }
 
 	 vec4 temp0, temp1, temp2;
-	 temp0 = vec4(*verts[pts[0]]);
-	 temp1 = vec4(*verts[pts[1]]);
-	 temp2 = vec4(*verts[pts[2]]);
+	 vertnorm v0 = vertnorms[pts[0]];
+	 vertnorm v1 = vertnorms[pts[1]];
+	 vertnorm v2 = vertnorms[pts[2]];
+	 temp0 = vec4(*(v0.vert));
+	 temp1 = vec4(*(v1.vert));
+	 temp2 = vec4(*(v2.vert));
 	 vec3 vert0 = vec3(transformations.top() * temp0);
 	 vec3 vert1 = vec3(transformations.top() * temp1);
 	 vec3 vert2 = vec3(transformations.top() * temp2);
 	 
-	//shapes->push_back(new TriNormal(
+	shapes->push_back(new TriNormal(vert0,vert1,vert2, *(v0.norm), *(v1.norm), *(v2.norm), curDiffuse, curSpecular, curEmission, curShininess)); 
 	}
 	
     /******************************************/

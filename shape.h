@@ -153,13 +153,13 @@ protected:
 
 class TriNormal : public Triangle {
 public: 
-  TriNormal(vertnorm _a, vertnorm _b, vertnorm _c, Color d, Color s, Color e, double sh) {
-    a = *(_a.vert);
-    na = *(_a.norm);
-    b = *(_b.vert);
-    nb = *(_b.norm);
-    c = *(_c.vert);
-    nc = *(_c.norm);
+  TriNormal(vec3 _a, vec3 _b, vec3 _c, vec3 _na, vec3 _nb, vec3 _nc, Color d, Color s, Color e, double sh) {
+    a = _a;
+    na = _na;
+    b = _b;
+    nb = _nb;
+    c = _c;
+    nc = _nc;
     setMatProps(d,s,e, sh);
 
   }
