@@ -1,6 +1,6 @@
 #include "raytracer.h"
 
-#define OFFSET 1
+#define OFFSET 0.2
 
 class PointLight : public Light {
 public:
