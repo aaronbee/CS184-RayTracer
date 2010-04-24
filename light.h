@@ -17,6 +17,10 @@ public:
     return colour;
   }
 
+  vec3 getDirFrom(vec3 i) {
+	return (pos - i).normalize();
+  }
+
 private:  
   vec3 pos;
 };
@@ -38,6 +42,9 @@ public:
     return colour;
   }
 
+  vec3 getDirFrom(vec3 i) {
+	return dir.normalize();
+  }
 
 private:
   vec3 dir;

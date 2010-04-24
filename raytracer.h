@@ -151,6 +151,8 @@ public:
 
   Color getColor() { return color; }
   virtual double incidentShade(vec3 i, vec3 n) { return Color(0,0,0); }
+  virtual vec3 getDirFrom(vec3 i) { return vec3(0, 0, 0); }
+  
 protected:
   Color color;
 };
