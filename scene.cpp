@@ -86,7 +86,7 @@ void Scene::render()
 
   while (getSample(&pixel)) {
 	r = cam->generateRay(pixel);
-	c = rt->trace(r);
+	c = rt->trace(r, scene->getMaxDepth());
 	film->put(pixel, c);
 	count++;
 	printProgress(count);
