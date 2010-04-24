@@ -11,7 +11,11 @@ Scene::Scene(char* path)
   
   outputPath = string("test.png");
   maxDepth = 5;
+  attenuation[0] = 1.0;
+  attenuation[1] = 0.0;
+  attenuation[2] = 0.0;
   transformations.push(identity3D());
+  ambient = Color(0.2, 0.2, 0.2);
   readScene(path);
   totalPix = width * height;
 }
@@ -21,8 +25,6 @@ void Scene::init()
   cam = new Camera();
   rt = new RayTracer();
   film = new Film();
-  ambient = Color(0.2, 0.2, 0.2);
-  setAttenuation(1.0, 0.0, 0.0);
 }
 
 void Scene::readScene(char* path)
@@ -373,7 +375,7 @@ void Scene::parsefile (FILE *fp) {
 	 double x,y,z,r,g,b;
 	 int num = sscanf(line, "%s %lf %lf %lf %lf %lf %lf", command, &x, &y, &z, &r, &g, &b) ;
 	 assert(num == 7) ;
-	 lights->push_back(new PointLight(vec3(x,y,z), Color(r,g,b)));
+	 lights->push_back(new PointLight(vec3(x,y,z), Color(r,g,b), attenuation));
 
        }
 
@@ -382,8 +384,9 @@ void Scene::parsefile (FILE *fp) {
        int num = sscanf(line, "%s %lf %lf %lf", command, &c, &l, &q );
        assert(num == 4) ;
        assert(!strcmp(command, "attenuation")) ;
-       scene->setAttenuation(c,l,q);
-	
+       attenuation[0] = c;
+	   attenuation[1] = l;
+	   attenuation[2] = q;
      }
 
      else if (!strcmp(command, "ambient")) {
