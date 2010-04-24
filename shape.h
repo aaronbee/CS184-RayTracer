@@ -23,8 +23,7 @@ Color Shape::hit(vec3 intersect) {
 	  contrib += diffuse * (*it)->incidentShade(intersect, normal);
 	  contrib += specular * pow((h * normal), shininess);
 
-	  //contrib.product((*it)->getColor());
-	  contrib *= (*it)->getColor();
+	  contrib *= (*it)->getAttenuatedColor(intersect);
 	}
 	result += contrib;
   }

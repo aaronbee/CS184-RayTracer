@@ -3,7 +3,7 @@
 # http://www.graphics.cornell.edu/online/box/data.html
 
 size 720 720
-output cornell_box.png
+output cornell_box_atten.png
 #antialiasing off
 
 camera 278 273 -800 278 273 -799 0 1 0 40
@@ -11,13 +11,13 @@ camera 278 273 -800 278 273 -799 0 1 0 40
 #point light for now
 
 # camera one (normal)
-#point 278 273 -800 1.0 0.85 0.43
+#point 278 540 279.5 1.0 1 1
 
 # camera two (test)
 point 278 548.0 0.0 1.0 0.85 0.43
 specular 0 0 0
 shininess 10.0
-#attenuation 1.0 0.001 0.000000008
+attenuation 1.0 0.001 0.000000008
 
 # off-white diffuse value
 diffuse 0.76 0.75 0.5

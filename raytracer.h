@@ -173,6 +173,7 @@ public:
   virtual double incidentShade(vec3 i, vec3 n) { return 0; }
   virtual vec3 getDirFrom(vec3 i) { return vec3(0, 0, 0); }
   virtual bool blocked(vec3 i) { return false; }
+  virtual Color getAttenuatedColor(vec3 i) { return getColor(); }
   
 protected:
   Color color;
