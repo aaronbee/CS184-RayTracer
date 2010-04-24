@@ -4,12 +4,6 @@
 #include "light.h"
 #include <stdio.h>
 
-typedef struct 
-{
-  vec3* vert;
-  vec3* norm;
-} vertnorm;
-
 Scene::Scene(char* path)
 {
   shapes = new vector<Shape *>();
@@ -255,7 +249,7 @@ void Scene::parsefile (FILE *fp) {
 									curSpecular, curEmission, curShininess));
 
   }
-  /*
+  
         else if (!strcmp(command, "trinormal")) {
 	  int pts[3] ;
 	  int num = sscanf(line, "%s %d %d %d", command, pts, pts+1, pts+2) ;
@@ -265,16 +259,17 @@ void Scene::parsefile (FILE *fp) {
 	    assert(pts[i] >= 0 && pts[i] < maxvertnorms) ;
 	  }
 
-	  glBegin(GL_TRIANGLES) ;
-	  for (i = 0 ; i < 3 ; i++) {
-	    VertexNormal &vn = vertnorm[pts[i]] ;
-	    glNormal3f(vn.normal[0], vn.normal[1], vn.normal[2]) ;
-	    glVertex3f(vn.pos[0], vn.pos[1], vn.pos[2]) ;
-	  }
-	  glEnd() ;
-
+	 vec4 temp0, temp1, temp2;
+	 temp0 = vec4(*verts[pts[0]]);
+	 temp1 = vec4(*verts[pts[1]]);
+	 temp2 = vec4(*verts[pts[2]]);
+	 vec3 vert0 = vec3(transformations.top() * temp0);
+	 vec3 vert1 = vec3(transformations.top() * temp1);
+	 vec3 vert2 = vec3(transformations.top() * temp2);
+	 
+	//shapes->push_back(new TriNormal(
 	}
-	*/
+	
     /******************************************/
 
     /**************** TRANSFORMATIONS *********/

@@ -22,6 +22,14 @@ class RayTracer;
 // Global scene
 extern Scene *scene;
 
+typedef struct 
+{
+  vec3* vert;
+  vec3* norm;
+} vertnorm;
+
+
+
 class Ray
 {
 public:
@@ -88,6 +96,15 @@ public:
   Color operator*(double scale) const {
     Color result = *this;
     result *= scale;
+    return result;
+  }
+  Color operator*=(const Color &rhs) {
+    values = prod(values, rhs.values);
+    return *this;
+  }
+  Color operator*(const Color &other) const {
+    Color result = *this;
+    result *= other;
     return result;
   }
 

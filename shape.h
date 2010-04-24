@@ -23,7 +23,8 @@ Color Shape::hit(vec3 intersect) {
 	  contrib += diffuse * (*it)->incidentShade(intersect, normal);
 	  contrib += specular * pow((h * normal), shininess);
 
-	  contrib.product((*it)->getColor());
+	  //contrib.product((*it)->getColor());
+	  contrib *= (*it)->getColor();
 	}
 	result += contrib;
   }
@@ -112,6 +113,9 @@ public:
 	: a(_a), b(_b), c(_c) { 
 	setMatProps(d, s, e, sh);
   }
+  Triangle() {
+
+  }
 
   /* Check if the ray r intersects the triangle. 
    */
@@ -141,8 +145,28 @@ public:
   }
   
 
-private:
+protected:
   vec3 a;
   vec3 b;
   vec3 c;
 };
+
+class TriNormal : public Triangle {
+public: 
+  TriNormal(vertnorm _a, vertnorm _b, vertnorm _c, Color d, Color s, Color e, double sh) {
+    a = *(_a.vert);
+    na = *(_a.norm);
+    b = *(_b.vert);
+    nb = *(_b.norm);
+    c = *(_c.vert);
+    nc = *(_c.norm);
+    setMatProps(d,s,e, sh);
+
+  }
+private:
+  vec3 na;
+  vec3 nb;
+  vec3 nc;
+
+};
+
