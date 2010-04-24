@@ -22,7 +22,8 @@ public:
   }
 
   bool blocked(vec3 i) {
-	Ray r = Ray(i, getDirFrom(i));
+	vec3 direction = getDirFrom(i);
+	Ray r = Ray(i + (direction * 0.1), direction);
 	double hitDist = scene->getRayTracer()->closestHit(r);
 	if (hitDist < 0) {
 	  return false;
@@ -60,7 +61,8 @@ public:
   }
 
   bool blocked(vec3 i) {
-	Ray r = Ray(i, getDirFrom(i));
+	vec3 direction = getDirFrom(i);
+	Ray r = Ray(i + (direction * 0.1), direction);
 	double hitDist = scene->getRayTracer()->closestHit(r);
 	if (hitDist < 0) {
 	  return false;
