@@ -13,12 +13,25 @@ public:
     vec3 shadowray = pos - i;
     shadowray.normalize();
     double colour = shadowray * normal;
-    if (colour <= 0.0) return Color(0,0,0);
+    if (colour <= 0.0) return 0;
     return colour;
   }
 
   vec3 getDirFrom(vec3 i) {
 	return (pos - i).normalize();
+  }
+
+  bool blocked(vec3 i) {
+	Ray r = Ray(i, getDirFrom(i));
+	double hitDist = scene->getRayTracer()->closestHit(r);
+	if (hitDist < 0) {
+	  return false;
+	}
+	double dist = (i - pos).length();
+	if (hitDist < dist) {
+	  return true;
+	}
+	return false;
   }
 
 private:  
@@ -38,12 +51,22 @@ public:
     vec3 shadowray = dir;
     shadowray.normalize();
     double colour = shadowray * normal;
-    if (colour <= 0.0) return Color(0,0,0);
+    if (colour <= 0.0) return 0;
     return colour;
   }
 
   vec3 getDirFrom(vec3 i) {
 	return dir.normalize();
+  }
+
+  bool blocked(vec3 i) {
+	Ray r = Ray(i, getDirFrom(i));
+	double hitDist = scene->getRayTracer()->closestHit(r);
+	if (hitDist < 0) {
+	  return false;
+	} else {
+	  return true;
+	}
   }
 
 private:

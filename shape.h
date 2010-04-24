@@ -16,14 +16,14 @@ Color Shape::hit(vec3 intersect) {
   for ( ; it != end; it ++) {
 	Color contrib = Color(0, 0, 0);
 	if (!(*it)->blocked(intersect)) {
-	  viewerDir = (scene->getCameraPos - intersect).normalize();
-	  lightDir = (*it)->getDirFrom(intersect);
+	  vec3 viewerDir = (scene->getCameraPos() - intersect).normalize();
+	  vec3 lightDir = (*it)->getDirFrom(intersect);
 	  vec3 h = halfAngle(viewerDir, lightDir);
 
 	  contrib += diffuse * (*it)->incidentShade(intersect, normal);
-	  contrib += specular * ((normal * h) ** shininess);
+	  contrib += specular * pow((h * normal), shininess);
 
-	  contrib *= (*it)->getColor();
+	  contrib.product((*it)->getColor());
 	}
 	result += contrib;
   }

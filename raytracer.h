@@ -91,6 +91,9 @@ public:
     return result;
   }
 
+  void product(const Color other) {
+	values = prod(values, other.values);
+  }
 
 private:
   vec3 values;
@@ -116,7 +119,7 @@ protected:
   double shininess;
   
   virtual vec3 calculateNormal(vec3 i) { return vec3(0, 0, 0); }
-  vec3 halfAngle(const vec3 one, const vec3 two)
+  vec3 halfAngle(const vec3 one, const vec3 two);
 
   void setMatProps(Color d, Color s, Color e, double sh) {
 	diffuse = d;
@@ -150,8 +153,9 @@ public:
   Light() { }
 
   Color getColor() { return color; }
-  virtual double incidentShade(vec3 i, vec3 n) { return Color(0,0,0); }
+  virtual double incidentShade(vec3 i, vec3 n) { return 0; }
   virtual vec3 getDirFrom(vec3 i) { return vec3(0, 0, 0); }
+  virtual bool blocked(vec3 i) { return false; }
   
 protected:
   Color color;
@@ -183,6 +187,7 @@ public:
   double getLinearAttenuation() { return attenuation[1]; }
   double getQuadraticAttenuation() { return attenuation[2]; } 
   
+  RayTracer *getRayTracer() { return rt; }
   
   void init();
   void render();
@@ -230,6 +235,7 @@ class RayTracer
 public:
   RayTracer() { }
   Color trace(Ray r);
+  double closestHit(Ray r);
 };
 
 #endif
