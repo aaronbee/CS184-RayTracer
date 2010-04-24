@@ -87,7 +87,7 @@ public:
 
   vec3 calculateNormal(vec3 i) {
 	vec3 normal = (vec3(inverse * i) - center);
-	normal = vec3(inverse * (vec4(normal, 0)), 3);
+	normal = vec3(inverse.transpose() * (vec4(normal, 0)), 3);
 	normal.normalize();
 	return normal;
   }
