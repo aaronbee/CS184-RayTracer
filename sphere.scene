@@ -17,7 +17,7 @@ camera -4 -4 4 0 0 0 0 1 0 30
 
 #ambient .1 .1 .1
 #directional 0 0 1 .5 .5 .5 
-point -4 -4 4 .7 .7 .7
+point -4 -4 0 .7 .7 .7
 #diffuse 1 0 0 
 #specular 0 0 0
 
@@ -32,8 +32,10 @@ point -4 -4 4 .7 .7 .7
 #rotate 1 0 0 45
 #scale 2 .5 .5
 #translate -1 0 0
-
+diffuse 0.5 0 0
+specular 1 1 1
+shininess 5
 sphere 0 0 0 1
 #popTransform
 
-sphere -1 -1 1 .4
+#sphere -1 -1 1 .4

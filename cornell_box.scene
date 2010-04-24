@@ -1,0 +1,147 @@
+# Cornell box scene description
+# based on original cornell box data from:
+# http://www.graphics.cornell.edu/online/box/data.html
+
+size 720 720
+output cornell_box.png
+#antialiasing off
+
+camera 278 273 -800 278 273 -799 0 1 0 40
+
+#point light for now
+
+# camera one (normal)
+#point 278 273 -800 1.0 0.85 0.43
+
+# camera two (test)
+point 278 548.0 0.0 1.0 0.85 0.43
+specular 0 0 0
+shininess 10.0
+#attenuation 1.0 0.001 0.000000008
+
+# off-white diffuse value
+diffuse 0.76 0.75 0.5
+specular 0 0.76 0.75 0.5
+
+maxverts 60
+
+# floor
+vertex 552.8 0.0   0.0
+vertex   0.0 0.0   0.0
+vertex   0.0 0.0 559.2
+vertex 549.6 0.0 559.2
+tri 1 2 0
+tri 3 0 2
+
+# ceiling
+vertex 556.0 548.8   0.0
+vertex 556.0 548.8 559.2
+vertex   0.0 548.8 559.2
+vertex   0.0 548.8   0.0
+tri 4 5 6
+tri 4 6 7
+
+# back wall
+vertex 549.6   0.0 559.2
+vertex   0.0   0.0 559.2
+vertex   0.0 548.8 559.2
+vertex 556.0 548.8 559.2
+tri 9  10 8
+tri 11 8 10
+
+# green diffuse value
+diffuse 0.15 0.48 0.09
+specular 0.15 0.48 0.09
+# right wall
+vertex 0.0   0.0 559.2
+vertex 0.0   0.0   0.0
+vertex 0.0 548.8   0.0
+vertex 0.0 548.8 559.2
+tri 12 13 14
+tri 12 14 15
+
+# red diffuse value
+diffuse 0.63 0.06 0.04
+specular 0.63 0.06 0.04
+# left wall
+vertex 552.8   0.0 0.0
+vertex 549.6   0.0 559.2
+vertex 556.0 548.8 559.2
+vertex 556.0 548.8 0.0
+tri 16 17 18
+tri 16 18 19
+
+# off-white diffuse value
+diffuse 0.76 0.75 0.5
+specular 0.76 0.75 0.5
+# short block
+vertex 130.0 165.0  65.0
+vertex  82.0 165.0 225.0
+vertex 240.0 165.0 272.0
+vertex 290.0 165.0 114.0
+tri 20 21 22
+tri 20 22 23
+
+vertex 290.0   0.0 114.0
+vertex 290.0 165.0 114.0
+vertex 240.0 165.0 272.0
+vertex 240.0   0.0 272.0
+tri 24 25 26
+tri 24 26 27
+
+vertex 130.0   0.0  65.0
+vertex 130.0 165.0  65.0
+vertex 290.0 165.0 114.0
+vertex 290.0   0.0 114.0
+tri 28 29 30
+tri 28 30 31
+
+vertex  82.0   0.0 225.0
+vertex  82.0 165.0 225.0
+vertex 130.0 165.0  65.0
+vertex 130.0   0.0  65.0
+tri 32 33 34
+tri 32 34 35
+
+vertex 240.0   0.0 272.0
+vertex 240.0 165.0 272.0
+vertex  82.0 165.0 225.0
+vertex  82.0   0.0 225.0
+tri 36 37 38
+tri 36 38 39
+
+# tall block
+vertex 423.0 330.0 247.0
+vertex 265.0 330.0 296.0
+vertex 314.0 330.0 456.0
+vertex 472.0 330.0 406.0
+tri 40 41 42
+tri 40 42 43
+
+vertex 423.0   0.0 247.0
+vertex 423.0 330.0 247.0
+vertex 472.0 330.0 406.0
+vertex 472.0   0.0 406.0
+tri 44 45 46
+tri 44 46 47
+
+vertex 472.0   0.0 406.0
+vertex 472.0 330.0 406.0
+vertex 314.0 330.0 456.0
+vertex 314.0   0.0 456.0
+tri 48 49 50
+tri 48 50 51
+
+vertex 314.0   0.0 456.0
+vertex 314.0 330.0 456.0
+vertex 265.0 330.0 296.0
+vertex 265.0   0.0 296.0
+tri 52 53 54
+tri 52 54 55
+
+vertex 265.0   0.0 296.0
+vertex 265.0 330.0 296.0
+vertex 423.0 330.0 247.0
+vertex 423.0   0.0 247.0
+tri 56 57 58
+tri 56 58 59

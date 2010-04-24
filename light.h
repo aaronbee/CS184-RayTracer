@@ -1,5 +1,7 @@
 #include "raytracer.h"
 
+#define OFFSET 1
+
 class PointLight : public Light {
 public:
   PointLight(vec3 p, Color c) {
@@ -23,7 +25,7 @@ public:
 
   bool blocked(vec3 i) {
 	vec3 direction = getDirFrom(i);
-	Ray r = Ray(i + (direction * 0.1), direction);
+	Ray r = Ray(i + (direction * OFFSET), direction);
 	double hitDist = scene->getRayTracer()->closestHit(r);
 	if (hitDist < 0) {
 	  return false;
@@ -62,7 +64,7 @@ public:
 
   bool blocked(vec3 i) {
 	vec3 direction = getDirFrom(i);
-	Ray r = Ray(i + (direction * 0.1), direction);
+	Ray r = Ray(i + (direction * OFFSET), direction);
 	double hitDist = scene->getRayTracer()->closestHit(r);
 	if (hitDist < 0) {
 	  return false;
