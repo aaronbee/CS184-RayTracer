@@ -16,6 +16,7 @@ Scene::Scene(char* path)
   attenuation[2] = 0.0;
   transformations.push(identity3D());
   ambient = Color(0.2, 0.2, 0.2);
+  numSamples = 1;
   readScene(path);
   totalPix = width * height;
 }
@@ -41,11 +42,17 @@ void Scene::readScene(char* path)
 
 bool Scene::getSample(vec2 *pixel)
 {
+  static int count = 0;
   if (y == height)
 	return false;
 
   *pixel = vec2(x, y);
-  x ++;
+  count ++;
+
+  if (count == scene->getNumSamples()) {
+	count = 0;
+	x ++;
+  }
 
   if (x == width) {
 	x = 0;
@@ -72,7 +79,7 @@ void Scene::printProgressHeader() {
 
 void Scene::printProgress(int count) {
   static int printed = 0;
-  int shouldPrint = 50.0 * ((double) count / (double) totalPix);
+  int shouldPrint = 50.0 * ((double) count / (double) totalPix) / scene->getNumSamples();
   for (; printed < shouldPrint; printed ++) {
 	cout << "X" << flush;
   }
@@ -354,7 +361,17 @@ void Scene::parsefile (FILE *fp) {
 
 	   outputPath = string(out);
 
-       }
+	}
+
+	else if (!strcmp(command, "samples")) {
+	  int samples;
+	  int num = sscanf(line, "%s %d", command, &samples) ;
+	  assert(num == 2) ;
+	  assert(!strcmp(command, "samples")) ;
+	
+	  numSamples = samples;
+	}
+
 
     /*************************************************/
 

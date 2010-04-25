@@ -191,6 +191,7 @@ public:
   vec3 getCameraUp() { return cameraUp; }
   vec3 getCameraLookAt() { return cameraLookAt; }
   bool getSample(vec2 *pixel);
+  int getNumSamples() { return numSamples; }
   vector<Shape *>* getShapes() { return shapes; }
 
   vector<Light *>* getLights() { return lights; }
@@ -215,6 +216,7 @@ private:
   int fov;
   vec3 cameraPos, cameraUp, cameraLookAt;
   int x, y;
+  int numSamples;
   int totalPix;
   vector<Shape *> *shapes;
   vector<Light *> *lights;
