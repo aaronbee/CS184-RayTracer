@@ -1,0 +1,37 @@
+#camera at 0 0 0 
+#500 by 500 view
+#looking into the z = -3 plane, and square with sides 2
+
+
+size 1000 800
+output example1.png
+camera 0 0 0 0 0 -1 0 1 0 40
+
+
+samples 16
+maxdepth 5
+
+directional -0.57735027 -0.57735027 0.57735027 1 1 1
+directional -0.57735027  0.57735027 0.57735027 0 0 1
+
+ambient 0.1 0.1 0.1
+diffuse 1 0 1
+specular 1 1 1
+shininess 50
+sphere 0 0 -20 3
+ 
+diffuse 1 1 0 
+sphere -2 2 -15 1
+
+diffuse 0 1 1
+sphere -2 -2 -15 1
+
+maxverts 3
+vertex -5 5 -17
+vertex -1 4 -20
+vertex -6 -1 -20
+
+diffuse 0.1 0.1 0.1
+specular 1 1 1
+tri 0 1 2
+
