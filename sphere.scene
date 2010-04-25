@@ -3,13 +3,15 @@
 
 size 400 400
 
+output antialized.png
+
 # Now specify the camera.  This is what you should implement.
 # This file has 4 camera positions.  Render your scene for all 4.
 
 #camera 0 0 4 0 0 0 0 1 0 30
 #camera 0 -3 3 0 0 0 0 1 0 30
 #camera -4 0 1 0 0 1 0 0 1 45
-camera -4 -4 4 0 0 0 0 1 0 30
+camera 4 0 0 0 0 0 0 1 0 30
 
 # lighting/material definitions
 # for initial testing, you should get the geometry right
@@ -27,11 +29,11 @@ point -4 -4 0 .7 .7 .7
 # Though it's probably simpler you just implement this, for later 
 # parts of the assignment.
 
-#pushTransform
+pushTransform
 
 rotate 1 0 0 45
-scale 2 .5 .5
-translate -1 0 0
+scale 1.2 1.2 0.2
+#translate -1 0 0
 diffuse 0.5 0 0
 specular 1 1 1
 shininess 5

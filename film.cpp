@@ -5,12 +5,12 @@
 Film::Film()
 {
   pixels = vector<vector<Color> >(scene->getHeight(),
-	vector<Color>(scene->getWidth()));
+								  vector<Color>(scene->getWidth(), Color(0, 0, 0)));
 }
 
 void Film::put(vec2 pixel, Color c)
 {
-  pixels[pixel[1]][pixel[0]] = c;
+  pixels[pixel[1]][pixel[0]] += (c * (1.0 / scene->getNumSamples()));
 }
 
 Color Film::get(vec2 pixel)
