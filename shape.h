@@ -139,7 +139,7 @@ public:
     return NULL;
   }
 
-  vec3 calculateNormal(vec3 i) {
+  virtual vec3 calculateNormal(vec3 i) {
 	return ((b-a) ^ (c-a)).normalize();
   }
   
@@ -162,6 +162,41 @@ public:
     setMatProps(d,s,e, sh);
 
   }
+  //interpolate the normals
+  vec3 calculateNormal(vec3 i) {
+    //find the 
+    //two sides
+    vec3 U = a-b;
+    vec3 V = c-b;
+
+    //intersection to point
+    vec3 n = i-b;
+
+    double du = U.length();
+    double dv = V.length();
+    double dn = n.length();
+
+    U.normalize();
+    n.normalize();
+
+    double cost = n * U;
+    double t = acos(cost); 
+
+    double distx = dn * cos(t);
+    double disty = dn * sin(t);
+
+    double u = distx/du;
+    double v = disty/dv;
+
+
+    return vec3(
+      (1.0 - u - v) * nb + u * na + v * nc
+    ); 
+	
+  }
+
+
+
 private:
   vec3 na;
   vec3 nb;
