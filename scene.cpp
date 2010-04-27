@@ -384,7 +384,10 @@ void Scene::parsefile (FILE *fp) {
 	 int num = sscanf(line, "%s %lf %lf %lf %lf %lf %lf", command, &x, &y, &z, &r, &g, &b) ;
 	 assert(num == 7) ;
 
-	 lights->push_back(new DirectionalLight(vec3(x,y,z), Color(r,g,b)));
+	 vec3 dir = vec3(x,y,z);
+	 dir = vec3(transformations.top() * vec4(dir, 0), 3);
+
+	 lights->push_back(new DirectionalLight(dir, Color(r,g,b)));
 
        }
 
@@ -392,7 +395,11 @@ void Scene::parsefile (FILE *fp) {
 	 double x,y,z,r,g,b;
 	 int num = sscanf(line, "%s %lf %lf %lf %lf %lf %lf", command, &x, &y, &z, &r, &g, &b) ;
 	 assert(num == 7) ;
-	 lights->push_back(new PointLight(vec3(x,y,z), Color(r,g,b), attenuation));
+
+	 vec3 pos = vec3(x,y,z);
+	 pos = vec3(transformations.top() * vec4(pos, 1));
+
+	 lights->push_back(new PointLight(pos, Color(r,g,b), attenuation));
 
        }
 
