@@ -25,9 +25,11 @@ Ray Camera::generateRay(vec2 pixel)
   vec3 dir;
   int width = scene->getWidth();
   int height = scene->getHeight();
-  
-  pixel[0] += ((double)rand() / (double)RAND_MAX) - 0.5;
-  pixel[1] += ((double)rand() / (double)RAND_MAX) - 0.5;
+
+  if (scene->getNumSamples() > 1) {
+	pixel[0] += ((double)rand() / (double)RAND_MAX) - 0.5;
+	pixel[1] += ((double)rand() / (double)RAND_MAX) - 0.5;
+  }
 
   alpha = - tan(fovx / 2) * (pixel[0] - (width / 2)) / (width / 2);
   beta = tan(fovy / 2) * ((height / 2) - pixel[1]) / (height / 2);
