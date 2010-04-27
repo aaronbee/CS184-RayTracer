@@ -4,11 +4,11 @@
 
 
 size 1000 800
-output example1.png
+output example-noaa.png
 camera 0 0 0 0 0 -1 0 1 0 40
 
 
-samples 16
+samples 1
 maxdepth 5
 
 directional -0.57735027 -0.57735027 0.57735027 1 1 1

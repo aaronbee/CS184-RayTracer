@@ -3,8 +3,8 @@
 # http://www.graphics.cornell.edu/online/box/data.html
 
 size 720 720
-output cornell_box_atten.png
-#antialiasing off
+output cornell_box.png
+samples 128
 
 camera 278 273 -800 278 273 -799 0 1 0 40
 
@@ -21,7 +21,7 @@ attenuation 1.0 0.001 0.000000008
 
 # off-white diffuse value
 diffuse 0.76 0.75 0.5
-specular 0 0.76 0.75 0.5
+#specular 0 0.76 0.75 0.5
 
 maxverts 60
 
@@ -51,7 +51,7 @@ tri 11 8 10
 
 # green diffuse value
 diffuse 0.15 0.48 0.09
-specular 0.15 0.48 0.09
+#specular 0.15 0.48 0.09
 # right wall
 vertex 0.0   0.0 559.2
 vertex 0.0   0.0   0.0
@@ -62,7 +62,7 @@ tri 12 14 15
 
 # red diffuse value
 diffuse 0.63 0.06 0.04
-specular 0.63 0.06 0.04
+#specular 0.63 0.06 0.04
 # left wall
 vertex 552.8   0.0 0.0
 vertex 549.6   0.0 559.2
@@ -73,7 +73,7 @@ tri 16 18 19
 
 # off-white diffuse value
 diffuse 0.76 0.75 0.5
-specular 0.76 0.75 0.5
+#specular 0.76 0.75 0.5
 # short block
 vertex 130.0 165.0  65.0
 vertex  82.0 165.0 225.0
