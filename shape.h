@@ -49,6 +49,47 @@ public:
 	zmax = max(z, Z);
   }
 
+  /**
+   * Copied implementation from book.
+   * Returns dummy vector if hit.
+   */
+  vec3 intersect(Ray r) {
+	double txmin, txmax, tymin, tymax, tzmin, tzmax;
+	double a = 1.0 / r.getDir()[0];
+	if (a >= 0) {
+	  txmin = a * (xmin - r.getPos()[0]);
+	  txmax = a * (xmax - r.getPos()[0]);
+	} else {
+	  txmin = a * (xmax - r.getPos()[0]);
+	  txmax = a * (xmin - r.getPos()[0]);
+	}
+
+	a = 1.0 / r.getDir()[1];
+	if (a >= 0) {
+	  tymin = a * (ymin - r.getPos()[1]);
+	  tymax = a * (ymax - r.getPos()[1]);
+	} else {
+	  tymin = a * (ymax - r.getPos()[1]);
+	  tymax = a * (ymin - r.getPos()[1]);
+	}
+
+	a = 1.0 / r.getDir()[2];
+	if (a >= 0) {
+	  tzmin = a * (zmin - r.getPos()[2]);
+	  tzmax = a * (zmax - r.getPos()[2]);
+	} else {
+	  tzmin = a * (zmax - r.getPos()[2]);
+	  tzmax = a * (zmin - r.getPos()[2]);
+	}
+
+	if ((txmin > tymax) || (tymin > txmax) ||
+		(txmin > tzmax) || (tzmin > txmax) ||
+		(tymin > tzmax) || (tzmin > tymax))
+	  return NULL;
+	else
+	  return vec3(0.0, 0.0, 0.0);
+  }
+
 private:
   double xmin, xmax, ymin, ymax, zmin, zmax;
 };
