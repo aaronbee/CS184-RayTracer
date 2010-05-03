@@ -38,6 +38,21 @@ vec3 Shape::halfAngle(const vec3 one, const vec3 two) {
   return (one + two).normalize();
 }
 
+class Box : public Shape {
+public:
+  Box(double x, double X, double y, double Y, double z, double Z) {
+	xmin = min(x, X);
+	xmax = max(x, X);
+	ymin = min(y, Y);
+	ymax = max(y, Y);
+	zmin = min(z, Z);
+	zmax = max(z, Z);
+  }
+
+private:
+  double xmin, xmax, ymin, ymax, zmin, zmax;
+};
+
 class Sphere : public Shape {
 public:
   /* return the intersection point of ray r with self,
