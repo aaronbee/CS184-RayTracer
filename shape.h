@@ -51,7 +51,6 @@ public:
 
   /**
    * Copied implementation from book.
-   * Returns dummy vector if hit.
    */
   vec3 intersect(Ray r) {
 	double txmin, txmax, tymin, tymax, tzmin, tzmax;
@@ -87,7 +86,9 @@ public:
 		(tymin > tzmax) || (tzmin > tymax))
 	  return NULL;
 	else
-	  return vec3(0.0, 0.0, 0.0);
+	  return r.getPos() + vec3(r.getDir()[0] * txmin,
+							   r.getDir()[1] * tymin,
+							   r.getDir()[2] * tzmin);
   }
 
 private:
