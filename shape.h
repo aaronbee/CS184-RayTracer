@@ -40,59 +40,42 @@ vec3 Shape::halfAngle(const vec3 one, const vec3 two) {
 
 class Box : public Shape {
 public:
-  Box(double x, double X, double y, double Y, double z, double Z) {
-	xmin = min(x, X);
-	xmax = max(x, X);
-	ymin = min(y, Y);
-	ymax = max(y, Y);
-	zmin = min(z, Z);
-	zmax = max(z, Z);
+  Box(vec3 m, vec3 M) {
+    for (int i = 0; i < 3; i ++) {
+      mins[i] = min(m[i], M[i]);
+      maxs[i] = max(m[i], M[i]);
+    }
   }
 
   /**
    * Copied implementation from book.
    */
   vec3 intersect(Ray r) {
-	double txmin, txmax, tymin, tymax, tzmin, tzmax;
-	double a = 1.0 / r.getDir()[0];
-	if (a >= 0) {
-	  txmin = a * (xmin - r.getPos()[0]);
-	  txmax = a * (xmax - r.getPos()[0]);
-	} else {
-	  txmin = a * (xmax - r.getPos()[0]);
-	  txmax = a * (xmin - r.getPos()[0]);
-	}
+    vec3 tmin, tmax;
+    double a;
+    for (int i = 0; i < 3; i ++) {
+      a = 1.0 / r.getDir()[i];
+      if (a >= 0) {
+	tmin[i] = a * (mins[i] - r.getPos()[i]);
+	tmax[i] = a * (maxs[i] - r.getPos()[i]);
+      } else {
+	tmin[i] = a * (maxs[i] - r.getPos()[i]);
+	tmax[i] = a * (mins[i] - r.getPos()[i]);
+      }
+    }
 
-	a = 1.0 / r.getDir()[1];
-	if (a >= 0) {
-	  tymin = a * (ymin - r.getPos()[1]);
-	  tymax = a * (ymax - r.getPos()[1]);
-	} else {
-	  tymin = a * (ymax - r.getPos()[1]);
-	  tymax = a * (ymin - r.getPos()[1]);
-	}
-
-	a = 1.0 / r.getDir()[2];
-	if (a >= 0) {
-	  tzmin = a * (zmin - r.getPos()[2]);
-	  tzmax = a * (zmax - r.getPos()[2]);
-	} else {
-	  tzmin = a * (zmax - r.getPos()[2]);
-	  tzmax = a * (zmin - r.getPos()[2]);
-	}
-
-	if ((txmin > tymax) || (tymin > txmax) ||
-		(txmin > tzmax) || (tzmin > txmax) ||
-		(tymin > tzmax) || (tzmin > tymax))
-	  return NULL;
-	else
-	  return r.getPos() + vec3(r.getDir()[0] * txmin,
-							   r.getDir()[1] * tymin,
-							   r.getDir()[2] * tzmin);
+    if ((tmin[0] > tmax[1]) || (tmin[1] > tmax[0]) ||
+	(tmin[0] > tmax[2]) || (tmin[2] > tmax[0]) ||
+	(tmin[1] > tmax[2]) || (tmin[2] > tmax[1]))
+      return NULL;
+    else
+      return r.getPos() + vec3(r.getDir()[0] * tmin[0],
+			       r.getDir()[1] * tmin[1],
+			       r.getDir()[2] * tmin[2]);
   }
 
 private:
-  double xmin, xmax, ymin, ymax, zmin, zmax;
+  vec3 mins, maxs;
 };
 
 /**
