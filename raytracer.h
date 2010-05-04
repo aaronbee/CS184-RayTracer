@@ -208,6 +208,7 @@ public:
   
   RayTracer *getRayTracer() { return rt; }
   
+  void buildBVH();
   void init();
   void render();
 

@@ -95,6 +95,27 @@ private:
   double xmin, xmax, ymin, ymax, zmin, zmax;
 };
 
+/**
+ * Node in Bounding Volume Hierarchy (BVH).
+ */
+class BVHNode : public Shape {
+public:
+  vec3 intersect(Ray r) {
+	if (bbox.intersect(r) == NULL)
+	  return NULL;
+	Ray leftI = NULL;
+	Ray rightI = NULL;
+	if (left != NULL)
+	  leftI = left->intersect(r);
+	if 
+  }
+
+private:
+  Box bbox;
+  Shape *left;
+  Shape *right;
+};
+
 class Sphere : public Shape {
 public:
   /* return the intersection point of ray r with self,
