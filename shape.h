@@ -103,11 +103,34 @@ public:
   vec3 intersect(Ray r) {
 	if (bbox.intersect(r) == NULL)
 	  return NULL;
-	Ray leftI = NULL;
-	Ray rightI = NULL;
+
+	vec3 leftI = NULL;
+	vec3 rightI = NULL;
+	double distL, distR;
+	
 	if (left != NULL)
 	  leftI = left->intersect(r);
-	if 
+
+	if (right != NULL)
+	  rightI = right->intersect(r);
+
+	if (leftI != NULL && rightI != NULL) {
+	  distL = (leftI - scene->getCameraPos()).length();
+	  distR = (rightI - scene->getCameraPos()).length();
+	  if (distL < distR)
+		return leftI;
+	  else
+		return rightI;
+
+	} else if (leftI != NULL) {
+	  return leftI;
+
+	} else if (rightI != NULL) {
+	  return rightI;
+
+	} else {
+	  return NULL;
+	}
   }
 
 private:
