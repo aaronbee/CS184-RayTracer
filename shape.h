@@ -3,6 +3,7 @@
 
 
 typedef vector<Light *>::iterator light_itr;
+typedef vector<Shape *>::iterator shape_itr;
 
 Color Shape::hit(vec3 intersect) {
   if (intersect == NULL) return Color(0,0,0);
@@ -43,7 +44,9 @@ vec3 Shape::halfAngle(const vec3 one, const vec3 two) {
  */
 class BVHNode : public Shape {
 public:
-  BVHNode(Box b, Shape *l, Shape *r) : bbox(b), left(l), right(r) { }
+  BVHNode(Box b, Shape *l, Shape *r) : left(l), right(r) { 
+	bbox = b;
+  }
 
   vec3 intersect(Ray r) {
 	if (bbox.intersect(r) == NULL)
@@ -81,7 +84,6 @@ public:
   friend BVHNode * createBVHTree(vector<Shape *> &shapes, int axis);
 
 private:
-  Box bbox;
   Shape *left;
   Shape *right;
 };
@@ -96,9 +98,20 @@ BVHNode * createBVHTree(vector<Shape *> &shapes, int axis) {
 	Box b = shapes[0]->getBoundingBox().combine(shapes[1]->getBoundingBox());
 	return new BVHNode(b, shapes[0], shapes[1]);
   } else {
-	// TODO
+	
 	return NULL;
   }
+}
+
+Box combineBoundingBoxes(vector <Shape *> &shapes) {
+  shape_itr i = shapes.begin();
+  shape_itr end = shapes.end();
+  Box b = (*i)->getBoundingBox();
+  i ++;
+  for (; i != end; i ++) {
+	b = b.combine((*i)->getBoundingBox());
+  }
+  return b;
 }
 
 class Sphere : public Shape {
