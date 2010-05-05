@@ -42,5 +42,6 @@ Color RayTracer::trace(Ray r, int level)
 
 double RayTracer::closestHit(Ray r) {
   vec3 i = scene->getTree()->intersect(r);
+  if (i == NULL) return -1;
   return (r.getPos() - i).length();
 }
