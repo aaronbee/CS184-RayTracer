@@ -222,6 +222,7 @@ public:
 	  m[i] = min(a[i], min(b[i], c[i]));
 	  M[i] = max(a[i], max(b[i], c[i]));
 	}
+	bbox = Box(m, M);
   }
   
 
