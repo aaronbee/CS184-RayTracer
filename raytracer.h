@@ -172,12 +172,13 @@ public:
   double getShininess() { return shininess; }
 
   virtual vec3 calculateNormal(vec3 i) { return vec3(0, 0, 0); }
-  virtual Box getBoundingBox() { return Box(vec3(0,0,0), vec3(0,0,0)); }
+  virtual Box getBoundingBox() { return bbox; }
 protected:
   Color diffuse;
   Color specular;
   Color emission;
   double shininess;
+  Box bbox;
   
   vec3 halfAngle(const vec3 one, const vec3 two);
 
