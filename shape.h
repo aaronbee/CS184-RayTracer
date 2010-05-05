@@ -63,8 +63,8 @@ public:
 	  rightI = right->intersect(r);
 
 	if (leftI != NULL && rightI != NULL) {
-	  distL = (leftI - scene->getCameraPos()).length();
-	  distR = (rightI - scene->getCameraPos()).length();
+	  distL = (leftI - r.getPos()).length();
+	  distR = (rightI - r.getPos()).length();
 	  if (distL < distR)
 		return leftI;
 	  else
