@@ -154,6 +154,15 @@ public:
 							   r.getDir()[2] * tmin[2]);
   }
 
+  Box combine(Box b) {
+	vec3 m, M;
+	for (int i = 0; i < 3; i ++) {
+	  m[i] = min(this->mins[i], b.mins[i]);
+	  M[i] = max(this->maxs[i], b.maxs[i]);
+	}
+	return Box(m, M);
+  }
+
 private:
   vec3 mins, maxs;
 };
