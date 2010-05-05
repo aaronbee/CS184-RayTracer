@@ -107,6 +107,14 @@ void partition(vector<Shape *> &shapes, vec3 mid, int axis,
 	else
 	  right.push_back(*i);
   }
+  if (left.size() == shapes.size()) {
+	right.push_back(left.back());
+	left.pop_back();
+  }
+  else if (right.size() == shapes.size()) {
+	left.push_back(right.back());
+	right.pop_back();
+  }
 }
 
 BVHNode * createBVHTree(vector<Shape *> &shapes, int axis) {
