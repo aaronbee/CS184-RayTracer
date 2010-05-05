@@ -38,46 +38,6 @@ vec3 Shape::halfAngle(const vec3 one, const vec3 two) {
   return (one + two).normalize();
 }
 
-class Box : public Shape {
-public:
-  Box(vec3 m, vec3 M) {
-    for (int i = 0; i < 3; i ++) {
-      mins[i] = min(m[i], M[i]);
-      maxs[i] = max(m[i], M[i]);
-    }
-  }
-
-  /**
-   * Copied implementation from book.
-   */
-  vec3 intersect(Ray r) {
-    vec3 tmin, tmax;
-    double a;
-    for (int i = 0; i < 3; i ++) {
-      a = 1.0 / r.getDir()[i];
-      if (a >= 0) {
-	tmin[i] = a * (mins[i] - r.getPos()[i]);
-	tmax[i] = a * (maxs[i] - r.getPos()[i]);
-      } else {
-	tmin[i] = a * (maxs[i] - r.getPos()[i]);
-	tmax[i] = a * (mins[i] - r.getPos()[i]);
-      }
-    }
-
-    if ((tmin[0] > tmax[1]) || (tmin[1] > tmax[0]) ||
-	(tmin[0] > tmax[2]) || (tmin[2] > tmax[0]) ||
-	(tmin[1] > tmax[2]) || (tmin[2] > tmax[1]))
-      return NULL;
-    else
-      return r.getPos() + vec3(r.getDir()[0] * tmin[0],
-			       r.getDir()[1] * tmin[1],
-			       r.getDir()[2] * tmin[2]);
-  }
-
-private:
-  vec3 mins, maxs;
-};
-
 /**
  * Node in Bounding Volume Hierarchy (BVH).
  */
