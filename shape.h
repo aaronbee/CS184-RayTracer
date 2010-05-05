@@ -81,12 +81,33 @@ public:
 	}
   }
 
-  friend BVHNode * createBVHTree(vector<Shape *> &shapes, int axis);
-
 private:
   Shape *left;
   Shape *right;
 };
+
+Box combineBoundingBoxes(vector<Shape *> &shapes) {
+  shape_itr i = shapes.begin();
+  shape_itr end = shapes.end();
+  Box b = (*i)->getBoundingBox();
+  i ++;
+  for (; i != end; i ++) {
+	b = b.combine((*i)->getBoundingBox());
+  }
+  return b;
+}
+
+void partition(vector<Shape *> &shapes, vec3 mid, int axis,
+			   vector<Shape *> &left, vector<Shape *> &right) {
+  shape_itr i = shapes.begin();
+  shape_itr end = shapes.end();
+  for (; i != end; i ++) {
+	if ((*i)->getBoundingBox().midpoint()[axis] < mid[axis])
+	  left.push_back(*i);
+	else
+	  right.push_back(*i);
+  }
+}
 
 BVHNode * createBVHTree(vector<Shape *> &shapes, int axis) {
   int n = shapes.size();
@@ -98,20 +119,15 @@ BVHNode * createBVHTree(vector<Shape *> &shapes, int axis) {
 	Box b = shapes[0]->getBoundingBox().combine(shapes[1]->getBoundingBox());
 	return new BVHNode(b, shapes[0], shapes[1]);
   } else {
-	
-	return NULL;
+	Box b = combineBoundingBoxes(shapes);
+	vec3 mid = b.midpoint();
+	vector<Shape *> l, r;
+	partition(shapes, mid, axis, l, r);
+	BVHNode *lt, *rt;
+	lt = createBVHTree(l, (axis + 1) % 3);
+	rt = createBVHTree(r, (axis + 1) % 3);
+	return new BVHNode(b, lt, rt);
   }
-}
-
-Box combineBoundingBoxes(vector <Shape *> &shapes) {
-  shape_itr i = shapes.begin();
-  shape_itr end = shapes.end();
-  Box b = (*i)->getBoundingBox();
-  i ++;
-  for (; i != end; i ++) {
-	b = b.combine((*i)->getBoundingBox());
-  }
-  return b;
 }
 
 class Sphere : public Shape {
