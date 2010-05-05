@@ -179,6 +179,8 @@ protected:
   Color emission;
   double shininess;
   Box bbox;
+
+  virtual void setBoundingBox() { bbox = Box(vec3(0,0,0), vec3(0,0,0)); }
   
   vec3 halfAngle(const vec3 one, const vec3 two);
 

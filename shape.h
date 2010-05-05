@@ -100,6 +100,7 @@ public:
 	: center(c), radius(r), matrix(m) {
 	inverse = m.inverse();
 	setMatProps(d, s, e, sh);
+	setBoundingBox();
   }
 
   /* Check if the ray r intersects the sphere.
@@ -145,6 +146,24 @@ public:
 	return normal;
   }
 
+  void setBoundingBox() {
+	vec3 x, y, z, X, Y, Z;
+	x = matrix * (center - vec3(radius, 0, 0));
+	X = matrix * (center + vec3(radius, 0, 0));
+	y = matrix * (center - vec3(0, radius, 0));
+	Y = matrix * (center + vec3(0, radius, 0));
+	z = matrix * (center - vec3(0, 0, radius));
+	Z = matrix * (center + vec3(0, 0, radius));
+
+	vec3 m, M;
+	for (int i = 0; i < 3; i ++) {
+	  m[i] = min(x[i], min(X[i], min(y[i], min(Y[i], min(z[i], Z[i])))));
+	  M[i] = max(x[i], max(X[i], max(y[i], max(Y[i], max(z[i], Z[i])))));
+	}
+
+	bbox = Box(m, M);
+  }
+
   /* method hit returns the color of object this seen by ray r
    * preconditions: none
    * Directions:
@@ -164,6 +183,7 @@ public:
   Triangle(vec3 _a, vec3 _b, vec3 _c, Color d, Color s, Color e, double sh)
 	: a(_a), b(_b), c(_c) { 
 	setMatProps(d, s, e, sh);
+	setBoundingBox();
   }
   Triangle() {
 
@@ -195,6 +215,14 @@ public:
   virtual vec3 calculateNormal(vec3 i) {
 	return ((b-a) ^ (c-a)).normalize();
   }
+
+  void setBoundingBox() {
+	vec3 m, M;
+	for (int i = 0; i < 3; i ++) {
+	  m[i] = min(a[i], min(b[i], c[i]));
+	  M[i] = max(a[i], max(b[i], c[i]));
+	}
+  }
   
 
 protected:
@@ -213,7 +241,7 @@ public:
     c = _c;
     nc = _nc;
     setMatProps(d,s,e, sh);
-
+	setBoundingBox();
   }
   //interpolate the normals
   vec3 calculateNormal(vec3 i) {
