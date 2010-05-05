@@ -19,6 +19,7 @@ class Color;
 class Film;
 class RayTracer;
 class Box;
+class Intersection;
 
 // Global scene
 extern Scene *scene;
@@ -321,6 +322,20 @@ public:
   RayTracer() { }
   Color trace(Ray r, int level);
   double closestHit(Ray r);
+};
+
+class Intersection
+{
+public:
+  Intersection() : hit(false) { }
+  Intersection(vec3 p, vec3 n, Shape s) :
+	pos(p), normal(n), shape(s), hit(true) { }
+
+private:
+  vec3 pos;
+  vec3 normal;
+  Shape shape;
+  bool hit;
 };
 
 #endif
