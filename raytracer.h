@@ -165,7 +165,7 @@ public:
 
   vec3 midpoint() {
 	vec3 m;
-	for (int i; i < 3; i ++) {
+	for (int i = 0; i < 3; i ++) {
 	  m[i] = (mins[i] + maxs[i]) / 2.0;
 	}
 	return m;
