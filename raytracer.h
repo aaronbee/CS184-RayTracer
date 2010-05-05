@@ -271,7 +271,6 @@ public:
   
   RayTracer *getRayTracer() { return rt; }
   
-  void buildBVH();
   void init();
   void render();
 
@@ -283,6 +282,7 @@ private:
   int numSamples;
   int totalPix;
   vector<Shape *> *shapes;
+  Shape *tree;
   vector<Light *> *lights;
   Color ambient;
   double attenuation[3];

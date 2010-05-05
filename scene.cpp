@@ -26,6 +26,7 @@ void Scene::init()
   cam = new Camera();
   rt = new RayTracer();
   film = new Film();
+  tree = createBVHTree(*shapes, 0);
 }
 
 void Scene::readScene(char* path)
