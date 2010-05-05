@@ -256,6 +256,7 @@ public:
   bool getSample(vec2 *pixel);
   int getNumSamples() { return numSamples; }
   vector<Shape *>* getShapes() { return shapes; }
+  Shape * getTree() { return tree; }
 
   vector<Light *>* getLights() { return lights; }
 

@@ -4,7 +4,7 @@
 
 size 720 720
 output cornell_box.png
-samples 128
+#samples 128
 
 camera 278 273 -800 278 273 -799 0 1 0 40
 
