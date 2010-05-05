@@ -43,6 +43,8 @@ vec3 Shape::halfAngle(const vec3 one, const vec3 two) {
  */
 class BVHNode : public Shape {
 public:
+  BVHNode(Box b, Shape *l, Shape *r) : bbox(b), left(l), right(r) { }
+
   vec3 intersect(Ray r) {
 	if (bbox.intersect(r) == NULL)
 	  return NULL;
@@ -76,11 +78,18 @@ public:
 	}
   }
 
+  friend BVHNode * createBVHTree(vector<Shape *> &shapes, int axis);
+
 private:
   Box bbox;
   Shape *left;
   Shape *right;
 };
+
+BVHNode * createBVHTree(vector<Shape *> &shapes, int axis) {
+  int n = shapes.size();
+  return NULL;
+}
 
 class Sphere : public Shape {
 public:
