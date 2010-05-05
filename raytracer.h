@@ -181,7 +181,7 @@ public:
   double getShininess() { return shininess; }
 
   virtual vec3 calculateNormal(vec3 i) { return vec3(0, 0, 0); }
-  virtual Box getBoundingBox() { return bbox; }
+  Box getBoundingBox() { return bbox; }
 protected:
   Color diffuse;
   Color specular;

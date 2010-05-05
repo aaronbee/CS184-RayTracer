@@ -88,7 +88,17 @@ private:
 
 BVHNode * createBVHTree(vector<Shape *> &shapes, int axis) {
   int n = shapes.size();
-  return NULL;
+  if (n == 0) {
+	return NULL;
+  } else if (n == 1) {
+	return new BVHNode(shapes[0]->getBoundingBox(), shapes[0], NULL);
+  } else if (n == 2) {
+	Box b = shapes[0]->getBoundingBox().combine(shapes[1]->getBoundingBox());
+	return new BVHNode(b, shapes[0], shapes[1]);
+  } else {
+	// TODO
+	return NULL;
+  }
 }
 
 class Sphere : public Shape {
