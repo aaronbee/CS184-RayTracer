@@ -196,20 +196,25 @@ public:
   }
 
   void setBoundingBox() {
-	vec3 x, y, z, X, Y, Z;
-	x = matrix * (center - vec3(radius, 0, 0));
-	X = matrix * (center + vec3(radius, 0, 0));
-	y = matrix * (center - vec3(0, radius, 0));
-	Y = matrix * (center + vec3(0, radius, 0));
-	z = matrix * (center - vec3(0, 0, radius));
-	Z = matrix * (center + vec3(0, 0, radius));
+	vec3 boundings[8];
+	boundings[0] = matrix * (center + vec3( radius,  radius,  radius));
+	boundings[1] = matrix * (center + vec3( radius,  radius, -radius));
+	boundings[2] = matrix * (center + vec3( radius, -radius,  radius));
+	boundings[3] = matrix * (center + vec3( radius, -radius, -radius));
+	boundings[4] = matrix * (center + vec3(-radius,  radius,  radius));
+	boundings[5] = matrix * (center + vec3(-radius,  radius, -radius));
+	boundings[6] = matrix * (center + vec3(-radius, -radius,  radius));
+	boundings[7] = matrix * (center + vec3(-radius, -radius, -radius));
 
 	vec3 m, M;
+	m = boundings[0];
+	M = boundings[0];
 	for (int i = 0; i < 3; i ++) {
-	  m[i] = min(x[i], min(X[i], min(y[i], min(Y[i], min(z[i], Z[i])))));
-	  M[i] = max(x[i], max(X[i], max(y[i], max(Y[i], max(z[i], Z[i])))));
+	  for (int j = 1; j < 8; j ++) {
+		m[i] = min(m[i], boundings[j][i]);
+		M[i] = max(M[i], boundings[j][i]);
+	  }
 	}
-
 	bbox = Box(m, M);
   }
 
