@@ -78,7 +78,7 @@ public:
     values = rhs.values;    
     return *this;
   }
-  //TODO: CEILING ON RGB
+
   Color operator+=(const Color &rhs) {
    values += rhs.values;
    if (values[0] > 1.0) values[0] = 1.0;
@@ -131,7 +131,7 @@ public:
   /**
    * Copied implementation from book.
    */
-  vec3 intersect(Ray r) {
+  bool isHit(Ray r) {
     vec3 tmin, tmax;
     double a;
     for (int i = 0; i < 3; i ++) {
@@ -148,11 +148,9 @@ public:
     if ((tmin[0] > tmax[1]) || (tmin[1] > tmax[0]) ||
 		(tmin[0] > tmax[2]) || (tmin[2] > tmax[0]) ||
 		(tmin[1] > tmax[2]) || (tmin[2] > tmax[1]))
-      return NULL;
+      return false;
     else
-      return r.getPos() + vec3(r.getDir()[0] * tmin[0],
-							   r.getDir()[1] * tmin[1],
-							   r.getDir()[2] * tmin[2]);
+      return true;
   }
 
   Box combine(Box b) {
@@ -330,6 +328,11 @@ public:
   Intersection() : hit(false) { }
   Intersection(vec3 p, vec3 n, Shape s) :
 	pos(p), normal(n), shape(s), hit(true) { }
+  
+  vec3 getPos() { return pos; }
+  vec3 getNormal() { return normal; }
+  Shape getShape() { return shape; }
+  bool isHit() { return hit; }
 
 private:
   vec3 pos;

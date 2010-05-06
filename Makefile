@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -O3 -I/opt/local/include
+CFLAGS = -Wall -O3 -I/opt/local/include
 LDFLAGS = -L/opt/local/lib -lm -lfreeimage
 
 all : raytracer
