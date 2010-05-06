@@ -78,11 +78,10 @@ public:
 	vec3 direction = getDirFrom(i);
 	Ray r = Ray(i + (direction * OFFSET), direction);
 	Intersect itrsct = scene->getRayTracer()->closestHit(r);
-	double hitDist = (itrsct.getPos() - i).length();
-	if (hitDist < 0) {
-	  return false;
-	} else {
+	if (itrsct.isHit()) {
 	  return true;
+	} else {
+	  return false;
 	}
   }
 
