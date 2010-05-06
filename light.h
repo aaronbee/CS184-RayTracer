@@ -27,8 +27,9 @@ public:
   bool blocked(vec3 i) {
 	vec3 direction = getDirFrom(i);
 	Ray r = Ray(i + (direction * OFFSET), direction);
-	double hitDist = scene->getRayTracer()->closestHit(r);
-	if (hitDist < 0) {
+	Intersect itrsct = scene->getRayTracer()->closestHit(r);
+	double hitDist = (itrsct.getPos() - i).length();
+	if (!itrsct.isHit()) {
 	  return false;
 	}
 	double dist = (i - pos).length();
@@ -76,7 +77,8 @@ public:
   bool blocked(vec3 i) {
 	vec3 direction = getDirFrom(i);
 	Ray r = Ray(i + (direction * OFFSET), direction);
-	double hitDist = scene->getRayTracer()->closestHit(r);
+	Intersect itrsct = scene->getRayTracer()->closestHit(r);
+	double hitDist = (itrsct.getPos() - i).length();
 	if (hitDist < 0) {
 	  return false;
 	} else {

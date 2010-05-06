@@ -130,11 +130,11 @@ void Scene::initialparse (FILE *fp) {
 
 void Scene::parsefile (FILE *fp) {
   char line[1000], command[1000] ; // Very bad to prefix array size :-)
-  vec3** verts;
+  vec3** verts = NULL;
   int curvert = 0;
   int maxverts;
 
-  vertnorm* vertnorms;
+  vertnorm* vertnorms = NULL;
   int curvertnorm = 0;
   int maxvertnorms;
 

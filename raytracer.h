@@ -19,7 +19,7 @@ class Color;
 class Film;
 class RayTracer;
 class Box;
-class Intersection;
+class Intersect;
 
 // Global scene
 extern Scene *scene;
@@ -30,7 +30,24 @@ typedef struct
   vec3* norm;
 } vertnorm;
 
+class Intersect
+{
+public:
+  Intersect() : pos(vec3(0,0,0)), normal(vec3(0,0,0)), shape(NULL), hit(false) { }
+  Intersect(vec3 p, vec3 n, Shape *s) :
+	pos(p), normal(n), shape(s), hit(true) { }
+  
+  vec3 getPos() { return pos; }
+  vec3 getNormal() { return normal; }
+  Shape * getShape() { return shape; }
+  bool isHit() { return hit; }
 
+private:
+  vec3 pos;
+  vec3 normal;
+  Shape *shape;
+  bool hit;
+};
 
 class Ray
 {
@@ -179,8 +196,8 @@ class Shape
 public:
   Shape() { }
 
-  virtual vec3 intersect(Ray r) { return false; }
-  Color hit(vec3 intersect);
+  virtual Intersect intersect(Ray r) { return Intersect(); }
+  Color hit(Intersect itrsct);
 
   Color getDiffuse() { return diffuse; }
   Color getSpecular() { return specular; }
@@ -319,26 +336,7 @@ class RayTracer
 public:
   RayTracer() { }
   Color trace(Ray r, int level);
-  double closestHit(Ray r);
-};
-
-class Intersection
-{
-public:
-  Intersection() : hit(false) { }
-  Intersection(vec3 p, vec3 n, Shape s) :
-	pos(p), normal(n), shape(s), hit(true) { }
-  
-  vec3 getPos() { return pos; }
-  vec3 getNormal() { return normal; }
-  Shape getShape() { return shape; }
-  bool isHit() { return hit; }
-
-private:
-  vec3 pos;
-  vec3 normal;
-  Shape shape;
-  bool hit;
+  Intersect closestHit(Ray r);
 };
 
 #endif

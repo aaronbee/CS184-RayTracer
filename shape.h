@@ -5,9 +5,8 @@
 typedef vector<Light *>::iterator light_itr;
 typedef vector<Shape *>::iterator shape_itr;
 
-Color Shape::hit(vec3 intersect) {
-  if (intersect == NULL) return Color(0,0,0);
-  vec3 normal = this->calculateNormal(intersect);
+Color Shape::hit(Intersect itrsct) {
+  if (!itrsct.isHit()) return Color(0,0,0);
   
   light_itr it = scene->getLights()->begin();
   light_itr end = scene->getLights()->end();
@@ -16,15 +15,16 @@ Color Shape::hit(vec3 intersect) {
 
   for ( ; it != end; it ++) {
 	Color contrib = Color(0, 0, 0);
-	if (!(*it)->blocked(intersect)) {
-	  vec3 viewerDir = (scene->getCameraPos() - intersect).normalize();
-	  vec3 lightDir = (*it)->getDirFrom(intersect);
+	if (!(*it)->blocked(itrsct.getPos())) {
+	  vec3 viewerDir = (scene->getCameraPos() - itrsct.getPos()).normalize();
+	  vec3 lightDir = (*it)->getDirFrom(itrsct.getPos());
 	  vec3 h = halfAngle(viewerDir, lightDir);
 
-	  contrib += diffuse * (*it)->incidentShade(intersect, normal);
-	  contrib += specular * pow((h * normal), shininess);
+	  contrib += diffuse * (*it)->incidentShade(itrsct.getPos(),
+												itrsct.getNormal());
+	  contrib += specular * pow((h * itrsct.getNormal()), shininess);
 
-	  contrib *= (*it)->getAttenuatedColor(intersect);
+	  contrib *= (*it)->getAttenuatedColor(itrsct.getPos());
 	}
 	result += contrib;
   }
@@ -48,12 +48,12 @@ public:
 	bbox = b;
   }
 
-  vec3 intersect(Ray r) {
-	if (bbox.intersect(r) == NULL)
-	  return NULL;
+  Intersect intersect(Ray r) {
+	if (!bbox.isHit(r))
+	  return Intersect();
 
-	vec3 leftI = NULL;
-	vec3 rightI = NULL;
+	Intersect leftI = Intersect();
+	Intersect rightI = Intersect();
 	double distL, distR;
 	
 	if (left != NULL)
@@ -62,22 +62,22 @@ public:
 	if (right != NULL)
 	  rightI = right->intersect(r);
 
-	if (leftI != NULL && rightI != NULL) {
-	  distL = (leftI - r.getPos()).length();
-	  distR = (rightI - r.getPos()).length();
+	if (leftI.isHit() && rightI.isHit()) {
+	  distL = (leftI.getPos() - r.getPos()).length();
+	  distR = (rightI.getPos() - r.getPos()).length();
 	  if (distL < distR)
 		return leftI;
 	  else
 		return rightI;
 
-	} else if (leftI != NULL) {
+	} else if (leftI.isHit()) {
 	  return leftI;
 
-	} else if (rightI != NULL) {
+	} else if (rightI.isHit()) {
 	  return rightI;
 
 	} else {
-	  return NULL;
+	  return Intersect();
 	}
   }
 
@@ -152,7 +152,7 @@ public:
 
   /* Check if the ray r intersects the sphere.
    */
-  vec3 intersect(Ray r) {
+  Intersect intersect(Ray r) {
     // break the ray into position and direction
     // ray p = p_o + p_d (t)
     
@@ -166,7 +166,7 @@ public:
     double a = transformed.getDir() * transformed.getDir();
     double discrim = pow(b,2.0) - 4 * a * c;
     
-    if (discrim < 0.0) { return NULL; }
+    if (discrim < 0.0) { return Intersect(); }
     
     double s1 = (-b + sqrt(discrim))/2*a;
     double s2 = (-b - sqrt(discrim))/2*a;
@@ -179,11 +179,13 @@ public:
     }
     else if (s1 > 0) { dist = s1; }
     else if (s2 > 0) { dist = s2; }
-    else { return NULL; }
+    else { return Intersect(); }
     
     //assert(dist > 0.0);
-	vec3 i = transformed.getPos() + dist * transformed.getDir();
-    return vec3(matrix * vec4(i));
+	vec3 p = transformed.getPos() + dist * transformed.getDir();
+	p = vec3(matrix * vec4(p));
+	vec3 n = calculateNormal(p);
+    return Intersect(p, n, this);
   }
 
   vec3 calculateNormal(vec3 i) {
@@ -238,25 +240,25 @@ public:
 
   /* Check if the ray r intersects the triangle. 
    */
-  vec3 intersect(Ray r) {
+  Intersect intersect(Ray r) {
     //find the normal (this defines a plane)
     vec3 normal = ((b - a) ^ (c - a)).normalize();
   
     
     double distance = - ((r.getPos() - a) * normal) / ( r.getDir() * normal);
     //cout << distance;
-    if (distance < 0.0) { return NULL; }
+    if (distance < 0.0) { return Intersect(); }
     
     //the point where the ray intersects the plane is 
     vec3 p = r.getPos() + distance * r.getDir();
     
     //check if the point is inside the triangle
-    if    ((((b - a) ^ (p - a)) * normal >= 0.0)
-		   && (((c - b) ^ (p - b)) * normal >= 0.0)
-		   && (((a - c) ^ (p - c)) * normal >= 0.0)) {
-      return p;
+    if ((((b - a) ^ (p - a)) * normal >= 0.0)
+		&& (((c - b) ^ (p - b)) * normal >= 0.0)
+		&& (((a - c) ^ (p - c)) * normal >= 0.0)) {
+      return Intersect(p, calculateNormal(p), this);
     }
-    return NULL;
+    return Intersect();
   }
 
   virtual vec3 calculateNormal(vec3 i) {
