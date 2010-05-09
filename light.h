@@ -29,12 +29,13 @@ public:
 	vec3 direction = getDirFrom(i, offset);
 	Ray r = Ray(i + (direction * OFFSET), direction);
 	Intersect itrsct = scene->getRayTracer()->closestHit(r);
-	double hitDist = (itrsct.getPos() - i).length();
 	if (!itrsct.isHit()) {
 	  return false;
 	}
+
+	double hitDist = (itrsct.getPos() - i).length();
 	double dist = (i - getPos(offset)).length();
-	if (hitDist < dist) {
+	if (hitDist + OFFSET < dist) {
 	  return true;
 	}
 	return false;
@@ -92,19 +93,29 @@ private:
 
 class AreaLight : public PointLight {
 public:
-  AreaLight(vec3 p, double x, double y, Color c, double *atten) {
+  AreaLight(vec3 p, double x, double y, int u, Color c, double *atten) {
     pos = p;
     color = c;
     width = x;
     length = y;
     attenuation = atten;
+    up = u;
   }
   
   vec3 getPos(vec2 offset) {
-    return pos + vec3(width * offset[0], length * offset[1], 0);
+    vec3 p;
+    if (up == 0) {
+      p = pos + vec3(0, width * offset[0], length * offset[1]);
+    } else if (up == 1) {
+      p = pos + vec3(width * offset[0], 0, length * offset[1]);
+    } else {
+      p = pos + vec3(width * offset[0], length * offset[1], 0);
+    }
+    return p;
   }
 
 private:
   double width;
   double length;
+  int up;
 };
