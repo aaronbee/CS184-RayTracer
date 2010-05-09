@@ -404,6 +404,18 @@ void Scene::parsefile (FILE *fp) {
 
        }
 
+      else if (!strcmp(command, "area")) {
+        double x,y,z,i,j,r,g,b;
+        int num = sscanf(line, "%s %lf %lf %lf %lf %lf %lf %lf %lf", command, &x, &y, &z, &i, &j, &r, &g, &b) ;
+	 assert(num == 7) ;
+
+	 vec3 pos = vec3(x,y,z);
+	 pos = vec3(transformations.top() * vec4(pos, 1));
+
+	 lights->push_back(new AreaLight(pos, i, j, Color(r,g,b), attenuation));
+
+       }
+
      else if (!strcmp(command, "attenuation")) {
        double c, l, q;
        int num = sscanf(line, "%s %lf %lf %lf", command, &c, &l, &q );

@@ -4,7 +4,7 @@
 
 class PointLight : public Light {
 public:
-  PointLight();
+  PointLight() { };
   PointLight(vec3 p, Color c, double *atten) {
     pos = p;
     color = c;
