@@ -10,10 +10,10 @@ public:
 	attenuation = atten;
   }
   
-  vec3 getPos() { return pos; }
+  virtual vec3 getPos(vec2 offset) { return pos; }
 
   double incidentShade(vec3 i, vec3 normal, vec2 offset) {
-    vec3 shadowray = pos - i;
+    vec3 shadowray = getPos(offset) - i;
     shadowray.normalize();
     double colour = shadowray * normal;
     if (colour <= 0.0) return 0;
@@ -21,7 +21,7 @@ public:
   }
 
   vec3 getDirFrom(vec3 i, vec2 offset) {
-	return (pos - i).normalize();
+	return (getPos(offset) - i).normalize();
   }
 
   bool blocked(vec3 i, vec2 offset) {
@@ -32,7 +32,7 @@ public:
 	if (!itrsct.isHit()) {
 	  return false;
 	}
-	double dist = (i - pos).length();
+	double dist = (i - getPos(offset)).length();
 	if (hitDist < dist) {
 	  return true;
 	}
@@ -40,7 +40,7 @@ public:
   }
 
   Color getAttenuatedColor(vec3 i, vec2 offset) {
-	double dist = (pos - i).length();
+	double dist = (getPos(offset) - i).length();
 	Color c = getColor();
 	double atten = attenuation[0] + attenuation[1] * dist +
 	  attenuation[2] * pow(dist, 2);
@@ -48,7 +48,7 @@ public:
 	return getColor() * atten;
   }
 
-private:  
+protected:  
   vec3 pos;
   double *attenuation;
 };
@@ -89,22 +89,21 @@ private:
   vec3 dir;
 };
 
-class AreaLight : public Light {
+class AreaLight : public PointLight {
 public:
-  AreaLight(vec3 pos, double x, double y, Color c) {
-    corner = pos;
+  AreaLight(vec3 p, double x, double y, Color c, double *atten) {
+    pos = p;
     color = c;
     width = x;
     length = y;
-  }
-
-  double incidentShade(vec3 i, vec3 normal, vec2 offset) {
-    return 0;
+    attenuation = atten;
   }
   
+  vec3 getPos(vec2 offset) {
+    return corner + vec3(width * offset[0], length * offset[1], 0);
+  }
 
 private:
-  vec3 corner;
   double width;
   double length;
 };
