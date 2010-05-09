@@ -20,10 +20,10 @@ try:
         elif pieces[0] == 'vn':
             normals.append(pieces[1:])
         elif pieces[0] == 'f':
-            triangles.append([num.partition('/')[0] for num in pieces[1:]])
-        #triangles.append([pieces[1].partition('/')[0],
-        #                  pieces[2].partition('/')[1],
-        #                  pieces[3].partition('/')[2]])
+            coords = [num.partition('/')[0] for num in pieces[1:]]
+            triangles.append(coords[:3])
+            if len(coords) == 4: # We have a quad
+                triangles.append([coords[0], coords[2], coords[3]])
         else:
             continue
 

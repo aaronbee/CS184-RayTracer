@@ -1,6 +1,6 @@
 
 #include "raytracer.h"
-#include "FreeImage.h"
+#include <FreeImage.h>
 
 Film::Film()
 {
