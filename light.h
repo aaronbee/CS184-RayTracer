@@ -4,6 +4,7 @@
 
 class PointLight : public Light {
 public:
+  PointLight();
   PointLight(vec3 p, Color c, double *atten) {
     pos = p;
     color = c;
@@ -100,7 +101,7 @@ public:
   }
   
   vec3 getPos(vec2 offset) {
-    return corner + vec3(width * offset[0], length * offset[1], 0);
+    return pos + vec3(width * offset[0], length * offset[1], 0);
   }
 
 private:
