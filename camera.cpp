@@ -36,8 +36,6 @@ Ray Camera::generateRay(vec2 pixel)
 
   dir = (alpha * u) + (beta * v) - w;
   dir.normalize();
-  //  dir += scene->getCameraPos();
-  //  dir.normalize();
 
   Ray rtn = Ray(scene->getCameraPos(), dir);
 

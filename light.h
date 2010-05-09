@@ -12,7 +12,7 @@ public:
   
   vec3 getPos() { return pos; }
 
-  double incidentShade(vec3 i, vec3 normal) {
+  double incidentShade(vec3 i, vec3 normal, vec2 offset) {
     vec3 shadowray = pos - i;
     shadowray.normalize();
     double colour = shadowray * normal;
@@ -20,12 +20,12 @@ public:
     return colour;
   }
 
-  vec3 getDirFrom(vec3 i) {
+  vec3 getDirFrom(vec3 i, vec2 offset) {
 	return (pos - i).normalize();
   }
 
-  bool blocked(vec3 i) {
-	vec3 direction = getDirFrom(i);
+  bool blocked(vec3 i, vec2 offset) {
+	vec3 direction = getDirFrom(i, offset);
 	Ray r = Ray(i + (direction * OFFSET), direction);
 	Intersect itrsct = scene->getRayTracer()->closestHit(r);
 	double hitDist = (itrsct.getPos() - i).length();
@@ -39,7 +39,7 @@ public:
 	return false;
   }
 
-  Color getAttenuatedColor(vec3 i) {
+  Color getAttenuatedColor(vec3 i, vec2 offset) {
 	double dist = (pos - i).length();
 	Color c = getColor();
 	double atten = attenuation[0] + attenuation[1] * dist +
@@ -62,7 +62,7 @@ public:
 
   vec3 getDir() { return dir; }
 
-  double incidentShade(vec3 i, vec3 normal) {
+  double incidentShade(vec3 i, vec3 normal, vec2 offset) {
     vec3 shadowray = dir;
     shadowray.normalize();
     double colour = shadowray * normal;
@@ -70,12 +70,12 @@ public:
     return colour;
   }
 
-  vec3 getDirFrom(vec3 i) {
+  vec3 getDirFrom(vec3 i, vec2 offset) {
 	return dir.normalize();
   }
 
-  bool blocked(vec3 i) {
-	vec3 direction = getDirFrom(i);
+  bool blocked(vec3 i, vec2 offset) {
+	vec3 direction = getDirFrom(i, offset);
 	Ray r = Ray(i + (direction * OFFSET), direction);
 	Intersect itrsct = scene->getRayTracer()->closestHit(r);
 	if (itrsct.isHit()) {
@@ -89,3 +89,22 @@ private:
   vec3 dir;
 };
 
+class AreaLight : public Light {
+public:
+  AreaLight(vec3 pos, double x, double y, Color c) {
+    corner = pos;
+    color = c;
+    width = x;
+    length = y;
+  }
+
+  double incidentShade(vec3 i, vec3 normal, vec2 offset) {
+    return 0;
+  }
+  
+
+private:
+  vec3 corner;
+  double width;
+  double length;
+};

@@ -249,10 +249,10 @@ public:
   Light() { }
 
   Color getColor() { return color; }
-  virtual double incidentShade(vec3 i, vec3 n) { return 0; }
-  virtual vec3 getDirFrom(vec3 i) { return vec3(0, 0, 0); }
-  virtual bool blocked(vec3 i) { return false; }
-  virtual Color getAttenuatedColor(vec3 i) { return getColor(); }
+  virtual double incidentShade(vec3 i, vec3 n, vec2 offset) { return 0; }
+  virtual vec3 getDirFrom(vec3 i, vec2 offset) { return vec3(0, 0, 0); }
+  virtual bool blocked(vec3 i, vec2 offset) { return false; }
+  virtual Color getAttenuatedColor(vec3 i, vec2 offset) { return getColor(); }
   
 protected:
   Color color;

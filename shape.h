@@ -15,16 +15,20 @@ Color Shape::hit(Intersect itrsct) {
 
   for ( ; it != end; it ++) {
 	Color contrib = Color(0, 0, 0);
-	if (!(*it)->blocked(itrsct.getPos())) {
+    vec2 offset = vec2((double)rand() / (double)RAND_MAX,
+                       (double)rand() / (double)RAND_MAX);
+
+	if (!(*it)->blocked(itrsct.getPos(), offset)) {
 	  vec3 viewerDir = (scene->getCameraPos() - itrsct.getPos()).normalize();
-	  vec3 lightDir = (*it)->getDirFrom(itrsct.getPos());
+	  vec3 lightDir = (*it)->getDirFrom(itrsct.getPos(), offset);
 	  vec3 h = halfAngle(viewerDir, lightDir);
 
 	  contrib += diffuse * (*it)->incidentShade(itrsct.getPos(),
-												itrsct.getNormal());
+												itrsct.getNormal(),
+                                                offset);
 	  contrib += specular * pow((h * itrsct.getNormal()), shininess);
 
-	  contrib *= (*it)->getAttenuatedColor(itrsct.getPos());
+	  contrib *= (*it)->getAttenuatedColor(itrsct.getPos(), offset);
 	}
 	result += contrib;
   }
