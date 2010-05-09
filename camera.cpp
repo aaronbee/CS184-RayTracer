@@ -26,18 +26,28 @@ Ray Camera::generateRay(vec2 pixel)
   int width = scene->getWidth();
   int height = scene->getHeight();
 
+  vec3 origin = scene->getCameraPos();
+  vec3 wTemp = w;
+  vec3 uTemp = u;
+  vec3 vTemp = v;
+
   if (scene->getNumSamples() > 1) {
 	pixel[0] += ((double)rand() / (double)RAND_MAX) - 0.5;
 	pixel[1] += ((double)rand() / (double)RAND_MAX) - 0.5;
+    origin += u * (((double)rand() / (double)RAND_MAX) - 0.5);
+    origin += v * (((double)rand() / (double)RAND_MAX) - 0.5);
+
+    wTemp = (origin - scene->getCameraLookAt()).normalize();
+    uTemp = wTemp ^ scene->getCameraUp();
+    uTemp.normalize();
+    vTemp = wTemp ^ uTemp;
   }
 
   alpha = - tan(fovx / 2) * (pixel[0] - (width / 2)) / (width / 2);
   beta = tan(fovy / 2) * ((height / 2) - pixel[1]) / (height / 2);
 
-  dir = (alpha * u) + (beta * v) - w;
+  dir = (alpha * uTemp) + (beta * vTemp) - wTemp;
   dir.normalize();
 
-  Ray rtn = Ray(scene->getCameraPos(), dir);
-
-  return rtn;
+  return Ray(origin, dir);
 }
