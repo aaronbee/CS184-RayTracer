@@ -17,6 +17,7 @@ Scene::Scene(char* path)
   transformations.push(identity3D());
   ambient = Color(0.2, 0.2, 0.2);
   numSamples = 1;
+  lensSize = 0;
   readScene(path);
   totalPix = width * height;
 }
