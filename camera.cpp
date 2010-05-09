@@ -34,8 +34,10 @@ Ray Camera::generateRay(vec2 pixel)
   if (scene->getNumSamples() > 1) {
 	pixel[0] += ((double)rand() / (double)RAND_MAX) - 0.5;
 	pixel[1] += ((double)rand() / (double)RAND_MAX) - 0.5;
-    origin += u * (((double)rand() / (double)RAND_MAX) - 0.5);
-    origin += v * (((double)rand() / (double)RAND_MAX) - 0.5);
+    origin += u * (scene->getLensSize() *
+                   (((double)rand() / (double)RAND_MAX) - 0.5));
+    origin += v * (scene->getLensSize() *
+                   (((double)rand() / (double)RAND_MAX) - 0.5));
 
     wTemp = (origin - scene->getCameraLookAt()).normalize();
     uTemp = wTemp ^ scene->getCameraUp();

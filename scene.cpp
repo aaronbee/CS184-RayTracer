@@ -179,6 +179,15 @@ void Scene::parsefile (FILE *fp) {
 	  Scene::fov = _fov;
     }
 
+    else if (!strcmp(command, "lenssize")) {
+      double temp;
+	  int num = sscanf(line, "%s %lf", command, &temp) ;
+	  assert(num == 2) ;
+	  assert(!strcmp(command,"lenssize")) ;
+      
+      lensSize = temp;
+	}
+
     /****************************************/
 
     /***********  GEOMETRY *******************/

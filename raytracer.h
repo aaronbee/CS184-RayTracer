@@ -285,6 +285,8 @@ public:
   double getConstantAttenuation() { return attenuation[0]; }
   double getLinearAttenuation() { return attenuation[1]; }
   double getQuadraticAttenuation() { return attenuation[2]; } 
+
+  double getLensSize() { return lensSize; }
   
   RayTracer *getRayTracer() { return rt; }
   
@@ -303,6 +305,7 @@ private:
   vector<Light *> *lights;
   Color ambient;
   double attenuation[3];
+  double lensSize;
   
   Camera *cam;
   RayTracer *rt;
