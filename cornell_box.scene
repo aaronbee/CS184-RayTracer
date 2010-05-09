@@ -3,8 +3,8 @@
 # http://www.graphics.cornell.edu/online/box/data.html
 
 size 720 720
-output cornell_box.png
-#samples 128
+output area_light.png
+samples 128
 
 camera 278 273 -800 278 273 -799 0 1 0 40
 
@@ -14,7 +14,8 @@ camera 278 273 -800 278 273 -799 0 1 0 40
 #point 278 540 279.5 1.0 1 1
 
 # camera two (test)
-point 278 548.0 0.0 1.0 0.85 0.43
+area 278 548.0 0.0 10 10 1.0 0.85 0.43
+#point 278 548 0 1 0.85 0.43
 specular 0 0 0
 shininess 10.0
 attenuation 1.0 0.001 0.000000008

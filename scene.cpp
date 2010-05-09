@@ -407,7 +407,7 @@ void Scene::parsefile (FILE *fp) {
       else if (!strcmp(command, "area")) {
         double x,y,z,i,j,r,g,b;
         int num = sscanf(line, "%s %lf %lf %lf %lf %lf %lf %lf %lf", command, &x, &y, &z, &i, &j, &r, &g, &b) ;
-	 assert(num == 7) ;
+	 assert(num == 9) ;
 
 	 vec3 pos = vec3(x,y,z);
 	 pos = vec3(transformations.top() * vec4(pos, 1));
