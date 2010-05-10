@@ -185,15 +185,16 @@ void Scene::parsefile (FILE *fp) {
     else if (!strcmp(command, "sphere")) {
 	  double radius ; // Syntax is sphere x y z radius 
 	  double pos[3] ;
-	  int num = sscanf(line, "%s %lf %lf %lf %lf", command, pos, pos+1, pos+2, &radius) ;
-	  if (num != 5) {
+	  double index;
+	  int num = sscanf(line, "%s %lf %lf %lf %lf %lf", command, pos, pos+1, pos+2, &radius, &index) ;
+	  if (num != 6) {
 		fprintf(stderr, "sphere x y z radius\n") ;
 		exit(1) ;
 	  }
 
 	  shapes->push_back(new Sphere(vec3(pos[0], pos[1], pos[2]), radius,
 								   curDiffuse, curSpecular, curEmission,
-								   curShininess, transformations.top()));
+								   curShininess, index, transformations.top()));
 
 	}
 	
