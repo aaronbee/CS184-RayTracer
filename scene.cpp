@@ -17,6 +17,7 @@ Scene::Scene(char* path)
   transformations.push(identity3D());
   ambient = Color(0.2, 0.2, 0.2);
   numSamples = 1;
+  lensSize = 0;
   readScene(path);
   totalPix = width * height;
 }
@@ -142,6 +143,7 @@ void Scene::parsefile (FILE *fp) {
   Color curSpecular = Color(vec3(0, 0, 0));
   Color curEmission = Color(vec3(0, 0, 0));
   double curShininess = 0.0;
+  Color black = Color(0, 0, 0);
 
   //  int sizeset = 0 ;
 
@@ -177,6 +179,15 @@ void Scene::parsefile (FILE *fp) {
 	  Scene::cameraLookAt = vec3(lookat[0], lookat[1], lookat[2]);
 	  Scene::fov = _fov;
     }
+
+    else if (!strcmp(command, "lenssize")) {
+      double temp;
+	  int num = sscanf(line, "%s %lf", command, &temp) ;
+	  assert(num == 2) ;
+	  assert(!strcmp(command,"lenssize")) ;
+      
+      lensSize = temp;
+	}
 
     /****************************************/
 
@@ -407,13 +418,38 @@ void Scene::parsefile (FILE *fp) {
 
       else if (!strcmp(command, "area")) {
         double x,y,z,i,j,r,g,b;
-        int num = sscanf(line, "%s %lf %lf %lf %lf %lf %lf %lf %lf", command, &x, &y, &z, &i, &j, &r, &g, &b) ;
-	 assert(num == 9) ;
+        int up;
+        int num = sscanf(line, "%s %lf %lf %lf %lf %lf %d %lf %lf %lf", command, &x, &y, &z, &i, &j, &up, &r, &g, &b) ;
+	 assert(num == 10) ;
 
 	 vec3 pos = vec3(x,y,z);
 	 pos = vec3(transformations.top() * vec4(pos, 1));
+     Color c = Color(r, g, b);
+     vec3 tri_pos[4];
+     tri_pos[0] = pos;
+     if (up == 0) {
+       tri_pos[1] = pos + vec3(0, i, 0);
+       tri_pos[2] = pos + vec3(0, 0, j);
+       tri_pos[3] = pos + vec3(0, i, j);
+     } else if (up == 1) {
+       tri_pos[1] = pos + vec3(i, 0, 0);
+       tri_pos[2] = pos + vec3(0, 0, j);
+       tri_pos[3] = pos + vec3(i, 0, j);
+     } else {
+       tri_pos[1] = pos + vec3(i, 0, 0);
+       tri_pos[2] = pos + vec3(0, j, 0);
+       tri_pos[3] = pos + vec3(i, j, 0);
+     }
 
-	 lights->push_back(new AreaLight(pos, i, j, Color(r,g,b), attenuation));
+     Triangle *one, *two;
+     one = new Triangle(tri_pos[0], tri_pos[1], tri_pos[2],
+                        black, black, c, 0);
+     two = new Triangle(tri_pos[1], tri_pos[3], tri_pos[2],
+                        black, black, c, 0);
+
+	 lights->push_back(new AreaLight(pos, i, j, up, c, attenuation));
+     shapes->push_back(one);
+     shapes->push_back(two);
 
        }
 
