@@ -53,7 +53,10 @@ class Ray
 {
 public:
   Ray() { }
-  Ray(const vec3 p, const vec3 d) : pos(p), dir(d) { }
+  Ray(const vec3 p, const vec3 d) : pos(p), dir(d) { indexOfRefraction = 1.0; }
+  Ray(const vec3 p, const vec3 d, const double i) : pos(p), dir(d), indexOfRefraction(i) { }
+  
+  double getIndex() { return indexOfRefraction; }
   vec3 getPos() { return pos; }
   vec3 getDir() { return dir; }
   Ray transform(const mat4 m) {
@@ -69,6 +72,7 @@ public:
 private:
   vec3 pos;
   vec3 dir;
+  double indexOfRefraction;
 };
 
 class Color
@@ -194,7 +198,7 @@ private:
 class Shape
 {
 public:
-  Shape() { }
+  Shape() { indexOfRefraction = 0.0; }
 
   virtual Intersect intersect(Ray r) { return Intersect(); }
   Color hit(Intersect itrsct);
@@ -203,6 +207,7 @@ public:
   Color getSpecular() { return specular; }
   Color getEmission() { return emission; }
   double getShininess() { return shininess; }
+  double getIndex() {return indexOfRefraction; }
 
   virtual vec3 calculateNormal(vec3 i) { return vec3(0, 0, 0); }
   Box getBoundingBox() { return bbox; }
@@ -212,6 +217,7 @@ protected:
   Color emission;
   double shininess;
   Box bbox;
+  double indexOfRefraction;
 
   virtual void setBoundingBox() { bbox = Box(vec3(0,0,0), vec3(0,0,0)); }
   
