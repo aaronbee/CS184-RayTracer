@@ -267,11 +267,29 @@ void Scene::parsefile (FILE *fp) {
 	 vec3 vert1 = vec3(transformations.top() * temp1);
 	 vec3 vert2 = vec3(transformations.top() * temp2);
 
-	 shapes->push_back(new Triangle(vert0, vert1, vert2, curDiffuse,
-									curSpecular, curEmission, curShininess));
+	 shapes->push_back(new Triangle(vert0, vert1, vert2, curDiffuse, curSpecular, curEmission, curShininess));
 
   }
-  
+ 	else if (!strcmp(command, "trirefractive")) { // Triangle from 3 vertices
+	 int pts[3] ; 
+	 float index;
+	 int num = sscanf(line, "%s %d %d %d %f", command, pts, pts+1, pts+2, &index) ;
+	 assert(num == 5) ; assert(!strcmp(command,"trirefractive")) ;
+	 int i ;
+	 for (i = 0 ; i < 3 ; i++) {
+	   assert(pts[i] >= 0 && pts[i] < maxverts) ;
+	 }
+	 vec4 temp0, temp1, temp2;
+	 temp0 = vec4(*verts[pts[0]]);
+	 temp1 = vec4(*verts[pts[1]]);
+	 temp2 = vec4(*verts[pts[2]]);
+	 vec3 vert0 = vec3(transformations.top() * temp0);
+	 vec3 vert1 = vec3(transformations.top() * temp1);
+	 vec3 vert2 = vec3(transformations.top() * temp2);
+
+	 shapes->push_back(new Triangle(vert0, vert1, vert2, curDiffuse, curSpecular, curEmission, curShininess, index));
+
+  } 
         else if (!strcmp(command, "trinormal")) {
 	  int pts[3] ;
 	  int num = sscanf(line, "%s %d %d %d", command, pts, pts+1, pts+2) ;

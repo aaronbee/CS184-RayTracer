@@ -49,6 +49,9 @@ Color RayTracer::trace(Ray r, int level)
 	}
 	else {
 	  refracted = trace(Ray(itrsct.getPos()+0.01 * transmission, transmission, index2), level-1);
+	  	
+	  double distance = (itrsct.getPos() - r.getPos()).length();
+	  refracted = refracted * exp(- log(1.1) * distance);
 	}
 
 	return itrsct.getShape()->hit(itrsct) + itrsct.getShape()->getSpecular() * trace(Ray(itrsct.getPos() + 0.01 * ref, ref), level-1) + refracted;

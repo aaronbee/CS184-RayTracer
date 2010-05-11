@@ -243,8 +243,15 @@ public:
 	: a(_a), b(_b), c(_c) { 
 	setMatProps(d, s, e, sh);
 	setBoundingBox();
+	indexOfRefraction = 0;
   }
-  Triangle() {
+   Triangle(vec3 _a, vec3 _b, vec3 _c, Color d, Color s, Color e, double sh, double i)
+	: a(_a), b(_b), c(_c) { 
+	setMatProps(d, s, e, sh);
+	setBoundingBox();
+	indexOfRefraction = i;
+  }
+ Triangle() {
 
   }
 
